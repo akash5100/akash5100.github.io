@@ -47,19 +47,36 @@ cat > "$PLUGINS/templater-obsidian/data.json" <<'JSON'
 }
 JSON
 
-# --- Custom Attachment Location: images land in static/assets/<post>/ -----
-# {{noteFileName}} is the note's base name, which is already <date>-<slug>,
-# so a drop writes static/assets/<date>-<slug>/<image>.png and the link it
-# inserts is the /assets/... path Hugo serves.
+# --- Custom Attachment Location: images land in assets/<post>/ ------------
+# Files are saved to the vault-root assets/ folder, which Hugo mounts at
+# /assets/ (see hugo.yaml), so the path Obsidian resolves and the path the
+# site serves are the same. Links are left to Obsidian's own generator
+# (markdownUrlFormat blank) because its rewriting runs after the save and is
+# what silently drops the inserted text when it fails.
 cat > "$PLUGINS/obsidian-custom-attachment-location/data.json" <<'JSON'
 {
   "shouldFollowObsidianAttachmentLocation": false,
-  "attachmentFolderPath": "static/assets/{{noteFileName}}",
-  "generatedAttachmentFileName": "{{originalAttachmentFileName}}",
-  "markdownUrlFormat": "/assets/{{noteFileName}}/{{generatedAttachmentFileName}}.{{attachmentFileExtension}}",
-  "attachmentRenameMode": "Only pasted images"
+  "attachmentFolderPath": "assets/{{noteFileName}}",
+  "generatedAttachmentFileName": "{{originalAttachmentFileName:{slugify:true}}",
+  "attachmentRenameMode": "All",
+  "duplicateNameSeparator": "-",
+  "markdownUrlFormat": ""
 }
 JSON
+
+# --- Obsidian core: markdown links, relative paths ------------------------
+# Relative links ("../../assets/<post>/x.png") resolve inside Obsidian and,
+# because /posts/<slug>/ sits at the same depth as content/posts/, resolve to
+# /assets/<post>/x.png once Hugo renders the page.
+python3 - "$VAULT" <<'PY'
+import json, pathlib, sys
+path = pathlib.Path(sys.argv[1]) / ".obsidian" / "app.json"
+cfg = json.loads(path.read_text()) if path.exists() else {}
+cfg["useMarkdownLinks"] = True
+cfg["newLinkFormat"] = "relative"
+path.write_text(json.dumps(cfg, indent=2) + "\n")
+print("app.json: useMarkdownLinks=true, newLinkFormat=relative")
+PY
 
 # --- Advanced Rename and Delete Handler: required by the plugin above -----
 # Defaults do nothing; they only gate loading. Left empty on purpose.
@@ -104,7 +121,11 @@ Done. Open Obsidian once and turn off Restricted mode
 (Settings -> Community plugins) so the plugins load.
 
 The ribbon now has a "New post" button: it asks for a title and tags, then
-creates content/posts/<date>-<slug>.md plus static/assets/<date>-<slug>/.
-Dropping an image into a post saves it into that folder and links it as
-/assets/<date>-<slug>/<image>.png, which is what Hugo serves.
+creates content/posts/<date>-<slug>.md plus assets/<date>-<slug>/.
+Dropping an image into a post saves it into that folder under a slugged name
+and inserts a relative link (../../assets/<post>/<image>.png), which resolves
+both inside Obsidian and on the published page.
+
+If Obsidian was already open, reload it (Cmd+R) so the plugins read the
+settings this script just wrote.
 EOF

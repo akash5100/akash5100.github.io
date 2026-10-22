@@ -4,6 +4,17 @@ title: "akash5100"
 module:
   imports:
     - path: github.com/adityatelange/hugo-PaperMod
+  mounts:
+    # Vault-root assets/ is served at /assets/... so the path Obsidian resolves
+    # (![](/assets/<post>/<file>.png)) is the same path Hugo publishes.
+    - source: content
+      target: content
+    - source: layouts
+      target: layouts
+    - source: static
+      target: static
+    - source: assets
+      target: static/assets
 
 outputs:
   home:

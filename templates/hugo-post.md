@@ -9,7 +9,8 @@ const name = `${date}-${slug}`;
 const tags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
 
 // Hugo asset folder for this post, matches Custom Attachment Location's pattern.
-try { await app.vault.createFolder(`static/assets/${name}`); } catch (e) { /* already exists */ }
+// assets/ sits at the vault root and is mounted at /assets/ by hugo.yaml.
+try { await app.vault.createFolder(`assets/${name}`); } catch (e) { /* already exists */ }
 
 // Rename + move the new note into content/posts/<date>-<slug>.md
 await tp.file.move(`/content/posts/${name}`);
