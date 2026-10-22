@@ -20,7 +20,11 @@ vendor/
 ehthumbs.db
 Thumbs.db
 
-# Obsidian vault config (local-only: plugins, hotkeys, workspace)
+# Obsidian vault config stays local: plugin binaries, workspace layout, caches.
+# The Obsidian automation itself is versioned outside the vault config:
+#   templates/hugo-post.md                 Templater template ("New post" button)
+#   scripts/install-obsidian-plugins.sh    installs + configures the plugins
+#   docs/obsidian-setup.md                 settings reference and troubleshooting
 .obsidian/
 *.canvas
 
