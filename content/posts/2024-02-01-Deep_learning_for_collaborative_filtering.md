@@ -1,6 +1,8 @@
 ---
 title: "Embeddings in sequential Neural Network"
 date: 2024-02-01
+aliases:
+  - /blog/2024/02/01/Deep_learning_for_collaborative_filtering.html
 tags:
   - "deeplearning"
 math: true

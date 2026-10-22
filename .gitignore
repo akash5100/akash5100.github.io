@@ -20,9 +20,8 @@ vendor/
 ehthumbs.db
 Thumbs.db
 
-# Obsidian workspace caches & local state
-.obsidian/workspace*
-.obsidian/cache
+# Obsidian vault config (local-only: plugins, hotkeys, workspace)
+.obsidian/
 *.canvas
 
 # Editor & IDE files

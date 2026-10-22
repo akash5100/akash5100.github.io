@@ -1,6 +1,8 @@
 ---
 title: "Global Attention"
 date: 2024-08-21
+aliases:
+  - /blog/2024/08/21/Global_Attention.html
 tags:
   - "deeplearning"
 math: true

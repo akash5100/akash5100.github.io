@@ -1,6 +1,8 @@
 ---
 title: "Tokenize & Numericalize"
 date: 2024-02-05
+aliases:
+  - /blog/2024/02/05/Tokenization_for_LM.html
 tags:
   - "deeplearning"
 math: true

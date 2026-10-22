@@ -1,6 +1,8 @@
 ---
 title: "Key-Value caching"
 date: 2024-05-06
+aliases:
+  - /blog/2024/05/06/Key-Value_caching_for_fast_inference.html
 tags:
   - "deeplearning"
 math: true

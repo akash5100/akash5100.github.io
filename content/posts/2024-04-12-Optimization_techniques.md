@@ -1,31 +1,15 @@
 ---
 title: "Parameter updates"
 date: 2024-04-12
+aliases:
+  - /blog/2024/04/12/Optimization_techniques.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
 Once the gradient is computed, it is then used to update the parameters. There are several approaches to perform the update.
-
-<!-- TOC -->
-### Table of contents
-
-- [First order(SGD), momentum, nesterov momentum](#first-ordersgd-momentum-nesterov-momentum)
-  - [Stochastic gradient descent](#stochastic-gradient-descent)
-  - [Momentum Update](#momentum-update)
-  - [Nesterov Momentum (NAG)](#nesterov-momentum-nag)
-- [Per-parameter adaptive learning rates (Adagrad, RMSProp)](#per-parameter-adaptive-learning-rates-adagrad-rmsprop)
-  - [Adagrad](#adagrad)
-  - [RMSProp (Gef. Hinton)](#rmsprop-gef-hinton)
-  - [Adam](#adam)
-  - [AdamW](#adamw)
-  - [AdamScheduleFree](#adamschedulefree)
-- [Second order methods](#second-order-methods)
-- [Sources](#sources)
 
 ## First order(SGD), momentum, nesterov momentum
 

@@ -1,34 +1,15 @@
 ---
 title: "Transformers"
 date: 2024-04-28
+aliases:
+  - /blog/2024/04/28/Transformers.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
 Back in 2017, the deep learning folks were trying to achieve state-of-the-art performance in sequence to sequence modeling. They used RNN's like LSTM and GRU. The best performing model connects the encoder and decoder through an attention mechanism. Where the encoder is used to encode some sequence into rich embeddings and decoder decodes that embedding to different sequence. Example, language translation.
-
-### Table of contents
-
-- [Sequence to sequence modeling and limitations of RNNs](#sequence-to-sequence-modeling-and-limitations-of-rnns)
-- [Transformer](#transformer)
-- [Model Architecture](#model-architecture)
-- [Attention](#attention)
-  - [Types of attention function](#types-of-attention-function)
-  - [Why scaling](#why-scaling)
-  - [Multihead attention](#multihead-attention)
-  - [Auto-regression mask for self-attention Head (Masked-attention)](#auto-regression-mask-for-self-attention-head-masked-attention)
-- [Feed Forward (Linear transformation)](#feed-forward-linear-transformation)
-- [Input Embeddings (Vocab and Positional)](#input-embeddings-vocab-and-positional)
-- [Regularizations used in the paper](#regularizations-used-in-the-paper)
-- [Transformer Architectures](#transformer-architectures)
-  - [Encoder-Decoder](#encoder-decoder)
-  - [Encoder only](#encoder-only)
-  - [Decoder only](#decoder-only)
-- [Sources](#sources)
 
 ## Sequence to sequence modeling and limitations of RNNs
 RNN had the vanishing gradient problem, models like LSTM and GRU emerged to tackle this problem but realized that altho the text may look better than rubbish, its still rubbish. It may look like English, but jumbled words and the sentence has no meaning.

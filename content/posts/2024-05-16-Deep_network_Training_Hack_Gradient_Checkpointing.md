@@ -1,6 +1,8 @@
 ---
 title: "Gradient-Checkpointing"
 date: 2024-05-16
+aliases:
+  - /blog/2024/05/16/Deep_network_Training_Hack_Gradient_Checkpointing.html
 tags:
   - "deeplearning"
 math: true

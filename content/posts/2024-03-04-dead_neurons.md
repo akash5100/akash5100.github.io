@@ -1,19 +1,14 @@
 ---
 title: "Dead Neurons"
 date: 2024-03-04
+aliases:
+  - /blog/2024/03/04/dead_neurons.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
-### Table of contents
-- [Peeking inside a hidden layer](#peeking-inside-a-hidden-layer)
-- [But how can we decide which number to multiply? (Initialization)](#but-how-can-we-decide-which-number-to-multiply)
-- [Summary](#summary)
-
 I implemented some techniques used in a research paper for n-gram language modeling. It is a simple MLP-based trigram language model that takes three characters' tokens as input, passes them into an embedding layer, then a hidden linear layer, and finally predicts the next character's token.
 
 Here are the hyperparameters I used:

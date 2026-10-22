@@ -1,6 +1,8 @@
 ---
 title: "Case Study on Transformer-based architecture"
 date: 2024-05-09
+aliases:
+  - /blog/2024/05/09/Case_Study_Transformer_based_architecture_development.html
 tags:
   - "deeplearning"
 math: true
@@ -109,7 +111,7 @@ TransformerXL used caching of Key and Value attention computation to speed up in
     `V_t+1^n` = `h^~         * W_v^t`  
     `Q_t+1^n` = `h_t+1^n-1   * W_q^t`  
     
-    Why not cache Q? That's a mystery. or [find out here](https://akash5100.github.io/blog/2024/05/06/Key-Value_caching_for_fast_inference.html).
+    Why not cache Q? That's a mystery. or [find out here](/posts/2024-05-06-key-value_caching_for_fast_inference/).
 
   
 2. **Relative positional encodings.**  
@@ -194,7 +196,7 @@ The paper introduced three key techniques to solve the quadratic complexity issu
     </figure>
     <hr>
 2. **Reuse attention matrices (saving memory)**  
-    - **[Gradient checkpointing](https://akash5100.github.io/blog/2024/05/16/Deep_network_Training_Hack_Gradient_Checkpointing.html)** is particularly effective for self-attention layers when long sequences are processed, as memory usage is high for these layers relative to the cost of computing them. Using recomputation alone, we are able to train dense attention networks with hundreds of layers on sequence lengths of 16,384, which would be infeasible on modern hardware otherwise.  
+    - **[Gradient checkpointing](/posts/2024-05-16-deep_network_training_hack_gradient_checkpointing/)** is particularly effective for self-attention layers when long sequences are processed, as memory usage is high for these layers relative to the cost of computing them. Using recomputation alone, we are able to train dense attention networks with hundreds of layers on sequence lengths of 16,384, which would be infeasible on modern hardware otherwise.  
     - **Mixed precision training**  
       Storing weights in single precision floating-point (32-bit), but compute network activations and gradients in half-precision (16-bit). (*Micikevicius et al., 2017*).  
       - **Dynamic loss scaling.** When we use half precision to calculate activations and gradients, they are more prone to underflow (very small becoming 0) and overflow (very large becoming infinity). To fix that, when calculating gradient, the loss value is scaled (multiplied) with a large number, before backward pass. We then calculate the gradients. Unscale the gradients by dividing them by the scale value. Update the parameters using unscaled gradients.  

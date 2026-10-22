@@ -1,6 +1,8 @@
 ---
 title: "Creating simple RAG"
 date: 2024-06-22
+aliases:
+  - /blog/2024/06/22/creating_MinRAG.html
 tags:
   - "deeplearning"
 math: true
@@ -26,7 +28,7 @@ This paper introduced, this simple architecture.
 Starting to understand how this "encoder" works.
 
 ### VectorDB
-But first, let's assume we don't know how the embeddings are created :), but [we know that embeddings](https://akash5100.github.io/blog/2024/01/15/embeddings.html#embeddings) are high-dimensional representation of words/sentences/images ~ our data. For now let's say we have a model D, which embeds your data into high dimensional vectors. i.e.,:
+But first, let's assume we don't know how the embeddings are created :), but [we know that embeddings](/posts/2024-01-15-embeddings/#embeddings) are high-dimensional representation of words/sentences/images ~ our data. For now let's say we have a model D, which embeds your data into high dimensional vectors. i.e.,:
 ```py
 data -> D -> vectors
 # we use this encoder to create embeddings for our documents

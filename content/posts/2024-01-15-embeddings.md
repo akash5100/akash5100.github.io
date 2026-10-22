@@ -1,26 +1,14 @@
 ---
 title: "Embeddings in Recommendation Systems"
 date: 2024-01-15
+aliases:
+  - /blog/2024/01/15/embeddings.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
-### Table of contents
-
-- [Collaborative Filtering](#collaborative-filtering)
-- [A Tabular Dataset -> Movie Recommendation System?](#a-tabular-dataset---movie-recommendation-system)
-- [Embeddings?](#embeddings)
-- [Speed up the calculation of scores](#speed-up-the-calculation-of-scores)
-- [Why sharp curves of learning weights = overfitting](#why-sharp-curves-of-learning-weights--overfitting)
-- [Weight Decay or L2 Regularization](#weight-decay-or-l2-regularization)
-- [Movie Recommendation System with Embeddings (MovieLens Dataset)](#movie-recommendation-system-with-embeddings-movielens-dataset)
-- [Direction and Distance of embeddings](#direction-and-distance-of-embeddings)
-- [Otakus are kinda poison to our embeddings](#otakus-are-kinda-poison-to-our-embeddings)
-
 I will write a follow up blog about Regression and Random Forest, today completes the half of the first month of 2024, I learned lots of stuffs that I am interested and participated on a Kaggle compe, predicing Energy consumption and production using solar panels, just to try what I learned and now I am one step closer to understanding the "Attention". I will continue this journey and still be writing this blog for future me like creating notes, maybe in more readable form.
 
 -------

@@ -1,19 +1,14 @@
 ---
 title: "Batch Normalization"
 date: 2024-03-10
+aliases:
+  - /blog/2024/03/10/Batch_Normalization.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
-### Table of contents
-
-- [Strange output of coupling](#strange-output-of-coupling)
-- [Source](#source)
-
 Understanding why training deep neural networks can be fragile is crucial. Issues like dead neurons or saturation of non-linearity, and the vanishing or exploding gradients have caused problem for deep learning for years. However, there's a beacon of hope that emerged around 2015: Batch Normalization.
 
 Here is a visualization of problem using graph. Say we have 1000 datapoints and each has 500 embeddings (latent factors).

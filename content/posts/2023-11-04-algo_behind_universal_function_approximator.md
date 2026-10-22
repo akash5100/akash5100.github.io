@@ -1,6 +1,8 @@
 ---
 title: "Algorithm behind universal function approximator"
 date: 2023-11-04
+aliases:
+  - /blog/2023/11/04/algo_behind_universal_function_approximator.html
 tags:
   - "deeplearning"
 math: true

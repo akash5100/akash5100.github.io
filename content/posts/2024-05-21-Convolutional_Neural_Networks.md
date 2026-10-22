@@ -1,6 +1,8 @@
 ---
 title: "CNNs"
 date: 2024-05-21
+aliases:
+  - /blog/2024/05/21/Convolutional_Neural_Networks.html
 tags:
   - "deeplearning"
 math: true

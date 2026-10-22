@@ -1,28 +1,18 @@
 ---
 title: "Understanding loss.backward()"
 date: 2024-04-02
+aliases:
+  - /blog/2024/04/02/understanding_loss.backward.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
 Relying on any library is not good; therefore, this time, removing this black box and understand what's happening inside. Writing a backward pass manually would be helpful. Backpropagation is not something that works magically or automatically if you are hoping to debug. In other words, it is easy to fall into the trap of abstracting away the learning process, believing that you can simply stack arbitrary layers together and backprop will magically make them work on your data. So let's look at a few explicit examples where this is not the case in quite unintuitive ways.
 
 This blog post is clearly set of personal notes for the notes by Andrej Karpathy's cs231n lectures.[^1][^2][^3]
 
-
-### Table of contents
-
-- [Simple expressions and interpretation of the gradient](#simple-expressions-and-interpretation-of-the-gradient)
-- [Compound Expressions with Chain Rule](#compound-expressions-with-chain-rule)
-- [Intutive understanding of backpropogation](#intutive-understanding-of-backpropogation)
-- [Backprop in practice: Staged computation](#backprop-in-practice-staged-computation)
-- [Gradients for vectorized operations](#gradients-for-vectorized-operations)
-- [Gradient checking](#gradient-checking)
-- [Sources](#sources)
 
 ## Simple expressions and interpretation of the gradient
 

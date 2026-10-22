@@ -1,6 +1,8 @@
 ---
 title: "Self-Supervised & Transfer Learning in Language Models"
 date: 2024-02-03
+aliases:
+  - /blog/2024/02/03/selfsup_learning.html
 tags:
   - "deeplearning"
 math: true

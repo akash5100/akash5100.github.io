@@ -1,22 +1,14 @@
 ---
 title: "Stateful Recurrent Neural Network"
 date: 2024-02-06
+aliases:
+  - /blog/2024/02/06/Tweaking_MLP_to_make_it_RNN.html
 tags:
   - "deeplearning"
 math: true
 ShowToc: true
 TocOpen: false
 ---
-
-
-### Table of contents
-
-- [We can remove the hardcoded part by replacing it with a loop](#we-can-remove-the-hardcoded-part-by-replacing-it-with-a-loop)
-  - [Improving our RNN](#improving-our-rnn)
-- [First thing first, let's solve the resetting of hidden state](#first-thing-first-lets-solve-the-resetting-of-hidden-state)
-- [Creating Multilayer RNN](#creating-multilayer-rnn)
-- [Exploding and disappearing Activations](#exploding-and-disappearing-activations)
-
 If we have data like: (from the example of previous blog)
 
 `X` -- `Y`
@@ -156,7 +148,7 @@ But this would be the shape of hidden state: `64 x 64`. This could be explained 
 > The gradients for the hidden state (self.h) will be detached after processing each sequence. This means that gradients will not be calculated or updated for the hidden state during backpropagation through time (BPTT) for subsequent sequences. However, gradients for other parameters in the model, such as the parameters of the embedding layer (self.ih) or the linear layers (self.hh and self.ho), will still be calculated and updated normally based on the loss computed at each time step.
 
 
-We can use our previous [group_chunks](https://akash5100.github.io/blog/deeplearning/2024/02/05/Tokenization_for_LM.html) function to create sequence.
+We can use our previous [group_chunks](/posts/2024-02-05-tokenization_for_lm/) function to create sequence.
 
 But wait, we can improve the our model, instead of predicting 1 word after every 3 word, *what if we can predict next word after every single word*?
 

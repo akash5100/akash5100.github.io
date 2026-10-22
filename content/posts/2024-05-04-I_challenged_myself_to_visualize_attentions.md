@@ -1,6 +1,8 @@
 ---
 title: "I challenged myself to visualize attentions (nothing special)"
 date: 2024-05-04
+aliases:
+  - /blog/2024/05/04/I_challenged_myself_to_visualize_attentions.html
 tags:
   - "deeplearning"
 math: true

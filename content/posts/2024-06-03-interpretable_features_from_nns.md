@@ -1,6 +1,8 @@
 ---
 title: "Interpretable Features from Neural Networks"
 date: 2024-06-03
+aliases:
+  - /blog/2024/06/03/interpretable_features_from_nns.html
 tags:
   - "deeplearning"
 math: true
@@ -19,7 +21,7 @@ I can relate his thoughts from this video "[Why Humans are intelligent?](https:/
 3) eye sight.
 ```
 
-So, I shifted my gears from [architectural improvements](https://akash5100.github.io/blog/2024/05/09/Case_Study-_Transformer_based_architecture_development.html) (I will come back to it, but when time comes) to multimodality.
+So, I shifted my gears from [architectural improvements](/posts/2024-05-09-case_study_transformer_based_architecture_development/) (I will come back to it, but when time comes) to multimodality.
 
 The first thing that came to mind was:
 
