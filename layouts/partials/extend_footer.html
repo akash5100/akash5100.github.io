@@ -1,0 +1,20 @@
+{{- if (and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search")) }}
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+        const target = container.classList.contains('highlight') ? container : codeblock.parentNode;
+        if (target.querySelector('.wrap-code')) return;
+
+        const wrapbutton = document.createElement('button');
+        wrapbutton.classList.add('copy-code', 'wrap-code');
+        wrapbutton.innerHTML = 'wrap';
+
+        wrapbutton.addEventListener('click', () => {
+            const isWrapped = target.classList.toggle('is-wrapped');
+            wrapbutton.innerHTML = isWrapped ? 'unwrap' : 'wrap';
+        });
+
+        target.appendChild(wrapbutton);
+    });
+</script>
+{{- end }}

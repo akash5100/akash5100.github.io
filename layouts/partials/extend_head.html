@@ -16,3 +16,39 @@
     });
 </script>
 {{- end }}
+
+<style>
+/* Code block horizontal scroll (no-wrap by default) */
+.highlight pre,
+pre {
+    overflow-x: auto !important;
+}
+.highlight pre code,
+.highlight .chroma .cl,
+pre code {
+    white-space: pre !important;
+    word-break: normal !important;
+}
+.highlight:not(.is-wrapped) .chroma .cl {
+    flex-shrink: 0 !important;
+}
+
+/* Code block wrapped state */
+.highlight.is-wrapped pre code,
+.highlight.is-wrapped .chroma .cl,
+pre.is-wrapped code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+}
+.highlight.is-wrapped .chroma .line {
+    flex-wrap: wrap !important;
+}
+.highlight.is-wrapped .chroma .cl {
+    min-width: 0 !important;
+}
+
+/* Wrap toggle button position (inherits all styles from PaperMod's .copy-code) */
+.wrap-code {
+    right: 62px;
+}
+</style>
