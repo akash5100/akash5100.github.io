@@ -81,8 +81,8 @@ We are left with the gradient in the variables \([ \frac{\partial f}{\partial x}
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/understanding_loss_backward/bpeg1.png" alt='backprop example' style="max-width: 100%; height: auto;">
-  <figcaption>Image is from cs231n notes by Karpathy. Visualization of above example as circuit. The forward pass, left to right, (shown in green) computes values from inputs to output. The backward pass, right to left, then performs backpropogation which starts at the end and recursively applies the chain rule to compute the gradients (shown in red) all the way to the inputs.  
+  <img src="/assets/understanding_loss_backward/bpeg1.png" alt="Computational graph showing forward values in green and backward gradients in red for an arithmetic circuit" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Image is from cs231n notes by Karpathy. Visualization of above example as circuit. The forward pass, left to right, (shown in green) computes values from inputs to output. The backward pass, right to left, then performs backpropogation which starts at the end and recursively applies the chain rule to compute the gradients (shown in red) all the way to the inputs.  
   Notice, in the addition node, the gradient (-4) flowed to both prior node equally, this is the basic idea of skip connections in ResNet.</figcaption>
 </figure>
 
@@ -223,9 +223,8 @@ dy += dsigy * ((1-sigy) * sigy)
 **Gradients add up at forks.** The forward expression involves the variables x,y multiple times, so when we perform backpropagation we must be careful to use `+=` instead of `=` to accumulate the gradient on these variables (otherwise we would overwrite it). This follows the multivariable chain rule in Calculus, which states that if a variable branches out to different parts of the circuit, then the gradients that flow back to it will add.
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/understanding_loss_backward/bpeg2.png" alt='backprop example' style="max-width: 100%; height: auto;">
-  <figcaption>Image is from cs231n notes by Karpathy. An example circuit demonstrating the intuition behind the operations that backpropagation performs during the backward pass in order to compute the gradients on the inputs. Sum operation distributes gradients equally to all its inputs. Max operation routes the gradient to the higher input. Multiply gate takes the input activations, swaps them and multiplies by its gradient
-  </figcaption>
+  <img src="/assets/understanding_loss_backward/bpeg2.png" alt="Computational graph illustrating gradient flow through add, max, and multiply gates" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Image is from cs231n notes by Karpathy. An example circuit demonstrating the intuition behind the operations that backpropagation performs during the backward pass in order to compute the gradients on the inputs. Sum operation distributes gradients equally to all its inputs. Max operation routes the gradient to the higher input. Multiply gate takes the input activations, swaps them and multiplies by its gradient</figcaption>
 </figure>
 <hr>
 
@@ -267,9 +266,7 @@ Start with small, explicit examples to derive gradients manually, then generaliz
 
 TLDwrote; [cs231n notes on gradient checking](https://cs231n.github.io/neural-networks-3/#gradcheck)
 
-## Sources
-
-
+## References
 [^1]: Inspired by [CS231n notes](https://cs231n.github.io/optimization-2/)
 [^2]: This blog is written as notes to this [youtube lecture](https://www.youtube.com/watch?v=q8SA3rM6ckI&list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ&index=5).
 [^3]: CS231n Lecture on backprop can be found [here](https://www.youtube.com/@andrejkarpathy4906).

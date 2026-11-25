@@ -30,8 +30,10 @@ We will use *three standard linear layers* but with *two tweaks*!
 
 Let's take the same example from above:
 
-![image](/assets/Tweaking_MLP_to_make_it_RNN/7a0dd00d-64db-4b3d-afe6-bb89f4ec0fc0.png)
-*`emb` means the embedding layer, so a word like 'one' is fed into the embedding layer.*
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/7a0dd00d-64db-4b3d-afe6-bb89f4ec0fc0.png" alt="Recurrent neural network unrolled across time steps with shared embedding and hidden layers" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Unrolled RNN processing a sequence word by word, where <code>emb</code> denotes the shared embedding layer.</figcaption>
+</figure>
 
 We can now create the language model module that.
 
@@ -217,7 +219,10 @@ tensor([[1, 2],
 ```
 Let's say we have 4 data points, and it gave us output of 5 (vowels).  The shape would be `2, 5`.
 
-![example of vocab](/assets/Tweaking_MLP_to_make_it_RNN/8f81728c-25f7-4ca1-bb2e-9c140cf32468.png)
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/8f81728c-25f7-4ca1-bb2e-9c140cf32468.png" alt="Example of vocabulary predictions with output shape (batch, vocab_size)" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Example vocabulary output tensor showing per-token class scores.</figcaption>
+</figure>
 
 Likewise, we stack all the `64` batch and calculate the loss together. Since we stacked on `dim=1`. Here is the loss function:
 
@@ -233,13 +238,17 @@ Before we can compare, we need to reshape and flatten them.
 
 Let's say this is our output:
 
-![vis output shape](/assets/Tweaking_MLP_to_make_it_RNN/19358d59-7d4b-46ff-a20a-a1d642997ada.png)
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/19358d59-7d4b-46ff-a20a-a1d642997ada.png" alt="Visualization of 3D output tensor shape before flattening" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> 3D output tensor shape <code>[batch_size, seq_len, vocab_size]</code> before flattening for loss computation.</figcaption>
+</figure>
 
 after flattening (starting with `sl`, dim=1) it will look like:
 
-![vis output shape after flat](/assets/Tweaking_MLP_to_make_it_RNN/c13b62d3-a55d-4632-bf78-8c4b767b3e9a.png)
-
-*The flattened second dim is of shape `[64 * 16, 30] = [1024, 30]`*
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/c13b62d3-a55d-4632-bf78-8c4b767b3e9a.png" alt="Visualization of 2D output tensor shape [1024, 30] after flattening" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Flattened 2D output tensor of shape <code>[64 * 16, 30] = [1024, 30]</code> ready for cross-entropy loss.</figcaption>
+</figure>
 
 The targets is of shape `bs, sl` = `64, 16`. We flatten them by `(-1)`. The `preds-targs` will be of shape `(6416, 30) - (6416,)`. We can use CrossEntropy loss normally in this.
 
@@ -249,7 +258,10 @@ We only have one linear layer between the hidden state and the output activation
 
 In, a multilayer RNN, we pass the activations from one RNN into a second RNN.
 
-![image](/assets/Tweaking_MLP_to_make_it_RNN/06184635-b2d0-4d5b-a86e-d969b25ebdb0.png)
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/06184635-b2d0-4d5b-a86e-d969b25ebdb0.png" alt="Multilayer RNN architecture passing hidden activations from layer 1 to layer 2" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> Stacked multilayer RNN: hidden activations from the first RNN layer feed as inputs into the second RNN layer.</figcaption>
+</figure>
 
 We can save our time and use PyTorch's RNN class, which implements exactly the same.
 
@@ -290,7 +302,10 @@ learn = Learner(dls, LMModel5(len(vocab), 64, 2),
                 metrics=accuracy, cbs=ModelResetter)
 learn.fit_one_cycle(15, 3e-3)
 ```
-![image](/assets/Tweaking_MLP_to_make_it_RNN/4c8de6ea-d643-4bd9-927f-918be1d7445d.png)
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/4c8de6ea-d643-4bd9-927f-918be1d7445d.png" alt="Training table showing 15 epochs of train_loss, valid_loss, and accuracy plateauing around 50.8%" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> 15-epoch training log of the deeper multilayer RNN, showing validation accuracy plateauing around 50.8%.</figcaption>
+</figure>
 
 It disappointing than our single layer RNN, why so? The reason is that we have a deeper model, leading to exploding or vanishing activations.
 
@@ -304,7 +319,10 @@ Because matrix multiplication is just multiplyiong number and then adding them u
 
 This is a problem, because the way computer stores floating numbers, it become less and less accurate the further away the number gets from zero.
 
-![image](/assets/Tweaking_MLP_to_make_it_RNN/a2a5d149-1726-41da-9aa7-9797021adb5b.png)
+<figure style="text-align: center;">
+  <img src="/assets/Tweaking_MLP_to_make_it_RNN/a2a5d149-1726-41da-9aa7-9797021adb5b.png" alt="Floating-point number line showing higher precision near zero and sparser spacing at larger magnitudes" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> Floating-point representation density along the number line: precision is highest near zero and becomes coarser further from zero.</figcaption>
+</figure>
 
 This inaccuracy often leads to the gradient calculated for updating the weights end up as zero or infinity. This is referred to as the *exploding or vanishing gradients* problem. That means, in SGD the weights are either not updated at all or jump to infinity, either way that doesn't improve with training.
 
@@ -313,3 +331,7 @@ One option is to change the definition of a layer in a way that makes it less li
 Another option is by being careful about initialization.
 
 For RNNs, two types of layers are frequently used to avoid exploding activations: gated recurrent units (GRUs) and long short-term memory (LSTM) layers. Both of these are available in PyTorch and are drop-in replacements for the RNN layer.
+
+
+## References
+1. [fast.ai — Deep Learning for Coders (RNNs & Language Modeling)](https://www.youtube.com/watch?v=wvsE8jm1GzE)

@@ -85,6 +85,7 @@ We collect those two and pass it to the Sequential layer, finally we can *sigmoi
 
 I tried to create a simple diagram of the above working:
 
-![image](/assets/Deep_learning_for_collaborative_filtering/66369779-ac92-415a-8d25-54f4869ef50a.png)
-
-### Sources
+<figure style="text-align: center;">
+  <img src="/assets/Deep_learning_for_collaborative_filtering/66369779-ac92-415a-8d25-54f4869ef50a.png" alt="Collaborative filtering neural network architecture concatenating 74 user factors and 101 item factors into linear layers with ReLU" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Deep collaborative filtering architecture: user embeddings (944 × 74) and item embeddings (1351 × 101) are concatenated into a 175-dim vector and passed through linear layers with ReLU to predict a scalar rating.</figcaption>
+</figure>

@@ -308,3 +308,8 @@ valid_ds = group_chunks(seqs[:cut], bs)
 ```
 
 This is the way, we organize the data into batches for sequential processing in a model, particularly in the context of recurrent neural networks (RNNs) or sequence models.
+
+
+## References
+1. [Human Numbers 100k dataset — Lee Butterman](https://www.leebutterman.com/2020/09/30/human-numbers-100k.html)
+2. [`fastai.text.core` tokenization source](https://github.com/fastai/fastai/blob/master/fastai/text/core.py#L23)

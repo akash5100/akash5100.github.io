@@ -28,27 +28,24 @@ RNN generates a sequence of hidden states `ht`, as a function of the previous hi
 Transformer was the first model architecture which avoided RNN and instead relying entirly on an attention mechanism to draw global dependencies between input and output. Transformer allows for significantly more parallelization and thus requires less time to train.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/sa.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>shows how the next word is predicted based on the previous words, Image is stolen from here: https://arxiv.org/pdf/1601.06733, I might create a project to visualize this myself stay tuned :D
-  </figcaption>
+  <img src="/assets/Transformers/sa.png" alt="Visualization of attention weights aligning words when predicting the next token" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Attention alignment heatmap showing how the next word is predicted from preceding context (source: <a href="https://arxiv.org/pdf/1601.06733">Cheng et al., 2016</a>).</figcaption>
 </figure>
 
 ## Model Architecture
 The paper was for natural language translation and most competitive neural sequence transduction model have an encoder-decoder structure, so the transformer proposed is also an encoder-decoder transformer. Where the encoder took sequence `x (1->n)` and generates continuous representation `z (1->n)`. Given `z`, the decoder then generates an output sequence one element at a time. At each step the model is **auto-regressive**. Consuming the previously generated symbols as additinal input when generating the next.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/t.png" alt='transformer arc' style="max-width: 100%; height: auto;">
-  <figcaption>Transformer Architecture: taken from the all time fav paper, Attention is All You Need.
-  </figcaption>
+  <img src="/assets/Transformers/t.png" alt="Transformer encoder-decoder model architecture diagram" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Transformer Architecture: taken from the all time fav paper, Attention is All You Need.</figcaption>
 </figure>
 
 ## Attention
 Understanding the attention is the core of transformer. Attention can be defined as mapping a **query** and a set of **key-value** pairs to an output, where the query, key, values and output are all vectors.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/dpattention.png" alt='transformer arc' style="max-width: 100%; height: auto;">
-  <figcaption>Scaled Dot-product attention: again, taken from the all time fav paper, Attention is All You Need.
-  </figcaption>
+  <img src="/assets/Transformers/dpattention.png" alt="Scaled dot-product attention block diagram" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Scaled Dot-product attention: again, taken from the all time fav paper, Attention is All You Need.</figcaption>
 </figure>
 
 Each vector is derived from the input `X`. In relatable words, to interpret this, think you have 
@@ -73,9 +70,8 @@ After the matrix multiplication, we scale the output by `1/(Dk)**0.5`. Where, `D
 While for the small value of `Dk`, additive function outperforms the dot-product attention without scaling for larger value of `Dk`. This is because, when the value of `Dk` is small, softmax receives bigger input which tends the softmax to create the probability distribution more easily. But, as we scale the dimension of head, i.e `head_size` (`Dk`) the input to softmax gets smaller and its hard for softmax to distribute the probability. To counteract this effect, we scale the dot product by `1/(Dk)**0.5`.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/scale.png" alt='transformer arc' style="max-width: 100%; height: auto;">
-  <figcaption>as we scale, i.e, the parameters gets bigger, we need to scale harder. This is the reason we choose dimension of Key-Query. The scaling prevents the dot products from becoming too large, which could lead to extremely small gradients in the softmax function, making training difficult
-  </figcaption>
+  <img src="/assets/Transformers/scale.png" alt="Effect of scaling dot-product attention by 1/sqrt(Dk) on variance and softmax gradients" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> as we scale, i.e, the parameters gets bigger, we need to scale harder. This is the reason we choose dimension of Key-Query. The scaling prevents the dot products from becoming too large, which could lead to extremely small gradients in the softmax function, making training difficult</figcaption>
 </figure>
 
 Therefore, we use **scaled dot-product attention** rather than **additive attention** without scaling.
@@ -84,9 +80,8 @@ Therefore, we use **scaled dot-product attention** rather than **additive attent
 Instead of performing a single attention function with `d` dimension-- d keys, queries and values, it is beneficial to linearly project the queries, keys and values `n` times with different. We then perform the attention function in parallel, yielding `n` times `head_size` output values. These are then concatenated and then have a *linear transformation*.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/mha.png" alt='transformer arc' style="max-width: 100%; height: auto;">
-  <figcaption>Multihead attention
-  </figcaption>
+  <img src="/assets/Transformers/mha.png" alt="Multi-head attention architecture running h parallel attention heads" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> Multihead attention</figcaption>
 </figure>
 
 ### Auto-regression mask for self-attention Head (Masked-attention)
@@ -94,9 +89,8 @@ Instead of performing a single attention function with `d` dimension-- d keys, q
 Recall this attention mechanism, but what is the mask?
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/dpattention.png" alt='transformer arc' style="max-width: 100%; height: auto;">
-  <figcaption>The Mask is optional.
-  </figcaption>
+  <img src="/assets/Transformers/dpattention.png" alt="Scaled dot-product attention highlighting the optional causal mask step" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> The Mask is optional.</figcaption>
 </figure>
 
 We create a triangular matrix, 0's on the top right and 1's on the bottom left.
@@ -119,9 +113,8 @@ tensor([[ 0.8350,  1.4479, -2.2848, -1.5227],  # <- Sequence 1 acts
 Now if we have matrix multiplication, the 0's effectively cancels the future occuring numbers.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/tril.png" alt='tril matrix mul' style="max-width: 100%; height: auto;">
-  <figcaption> The activations of tokens getting multiplied with 0's, doesnt take part in the prediction, thus achieving autoregressive property. 
-  </figcaption>
+  <img src="/assets/Transformers/tril.png" alt="Lower-triangular causal mask matrix multiplication zeroing out future tokens" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> The activations of tokens getting multiplied with 0's, doesnt take part in the prediction, thus achieving autoregressive property.</figcaption>
 </figure>
 
 We can improve this, instead of zeros in the mask matrix, if we replace them with `-inf` it will help **Softmax**. Replacing zeros with `-inf` in the triangular matrix masks future tokens, ensuring the model only attends to **past** and **present** tokens during self-attention by setting *future attention scores to effectively zero*.
@@ -141,9 +134,8 @@ FF(x) = [W1*x + B1] -> [relu] -> [h -> W2*h + B2]
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/ff.png" alt='attention feed forward' style="max-width: 100%; height: auto;">
-  <figcaption> Linear transformation on attention as described in "Attention is All You Need".  
-  </figcaption>
+  <img src="/assets/Transformers/ff.png" alt="Position-wise feed-forward network linear transformation in the Transformer" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 8.</strong> Linear transformation on attention as described in "Attention is All You Need".</figcaption>
 </figure>
 
 
@@ -155,9 +147,8 @@ FF(x) = [W1*x + B1] -> [relu] -> [h -> W2*h + B2]
 > read TransformerXL paper.
 
 <figure style="text-align: center;">
-  <img src="/assets/Transformers/embs.png" alt='positional emb' style="max-width: 100%; height: auto;">
-  <figcaption> Positional embedding added with token embeddings.  
-  </figcaption>
+  <img src="/assets/Transformers/embs.png" alt="Token embeddings summed with positional embeddings" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 9.</strong> Positional embedding added with token embeddings.</figcaption>
 </figure>
 
 **Comparison.** both versions produced nearly identical results, suggesting that the choice of positional encoding method did not significantly impact model performance. Ultimately, the authors opted for the sinusoidal positional encodings due to their potential for extrapolating to longer sequence lengths beyond those seen in training data.
@@ -184,7 +175,7 @@ Used for task like text classification, feature extraction, pretrained represent
 Used for language modeling, text generation tasks. Decoder components are masked self-attention and feed-forward layers, no encoder, no cross attention. Autoregressive in nature (due to attn-mask).
 
 
-## Sources
+## References
 - [Attention is All You Need, 2017](https://arxiv.org/abs/1706.03762)
 - [useful for visualization of sin positional encoding](https://github.com/wzlxjtu/PositionalEncoding2D/blob/master/visualization.ipynb)
 - tensorflow [original transformer](https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py#L479)

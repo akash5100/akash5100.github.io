@@ -48,9 +48,8 @@ For Translation, the prompt is `english sentence = french sentence
 Question Answering is a bit interesting and funny, figure out yourself. [Go here](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
 
 <figure style="text-align: center;">
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/qa.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>Fine, here it is.
-  </figcaption>
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/qa.png" alt="GPT-2 zero-shot question answering prompt-response formatting example" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Zero-shot question answering examples from GPT-2 (source: <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">Radford et al., 2019</a>).</figcaption>
 </figure>
 
 ----------------
@@ -89,15 +88,23 @@ for token in gen:
 - Training model like GPT-2 (1.4B parameters) on a big and quality dataset, was enough to generalize diversity of Natural langauge sementics that it performed **zero-shot** on variety of task.
 
 <figure style="text-align: center;">
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/one.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/two.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/three.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/four.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>some headmaps bruh, generating 4 different tokens each.
-  </figcaption>
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/one.png" alt="Attention heatmap visualization for generated token 1" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Attention heatmap for the first generated token.</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/two.png" alt="Attention heatmap visualization for generated token 2" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Attention heatmap for the second generated token.</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/three.png" alt="Attention heatmap visualization for generated token 3" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Attention heatmap for the third generated token.</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/four.png" alt="Attention heatmap visualization for generated token 4" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> Attention heatmap for the fourth generated token.</figcaption>
 </figure>
 
 <hr>
@@ -105,22 +112,28 @@ for token in gen:
 **Edit: okay, I trained a small 2 layer model, with good big context length in Amazon SageMaker, here are the results.**
 
 <figure style="text-align: center;">
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/4.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>Prompt: "Swift at the 1989 World Tour, the highest-grossing tour of 2015. In March 2014, Swift began living in New York City", prediction: " as"</figcaption>
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/3.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>Prompt: "New", preds: " York"</figcaption>
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/2.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>Prompt: "Are you", preds: " Harris"</figcaption>
-  <hr>
-  <img src="/assets/I_challenged_myself_to_visualize_attentions/1.png" alt='attention mechanism' style="max-width: 100%; height: auto;">
-  <figcaption>Prompt: "She is one of the most", preds: "-streamed" (it created most-streamed)</figcaption>
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/4.png" alt="Attention map for Taylor Swift prompt predicting ' as'" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> Prompt: "Swift at the 1989 World Tour, the highest-grossing tour of 2015. In March 2014, Swift began living in New York City", prediction: " as"</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/3.png" alt="Attention map for prompt 'New' predicting ' York'" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> Prompt: "New", preds: " York"</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/2.png" alt="Attention map for prompt 'Are you' predicting ' Harris'" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 8.</strong> Prompt: "Are you", preds: " Harris"</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="/assets/I_challenged_myself_to_visualize_attentions/1.png" alt="Attention map for prompt 'She is one of the most' predicting '-streamed'" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 9.</strong> Prompt: "She is one of the most", preds: "-streamed" (it created most-streamed)</figcaption>
 </figure>
 
 
 
-### Source
+## References
 - [GPT-1](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
 - [GPT-2](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
 - [Visualization notebook](https://github.com/akash5100/ai-notebooks/blob/main/transformer/visualization.ipynb)

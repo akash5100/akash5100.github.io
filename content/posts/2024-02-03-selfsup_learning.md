@@ -68,7 +68,10 @@ Here is the answer:
     A dedicated embedding matrix can take input to the index of vocab (created in step 2), this is faster and much efficient approach than normal one-hot encoded indexing the vocab.[^3]
 
 
-![image](/assets/selfsup_learning/be06002d-a485-410c-912b-e3f5c73feb62.png)
+<figure style="text-align: center;">
+  <img src="/assets/selfsup_learning/be06002d-a485-410c-912b-e3f5c73feb62.png" alt="Three-word sequence language model architecture using an embedding table and hidden layers to predict the next word over a 30-word vocabulary" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Self-supervised next-word prediction architecture: three input word tokens pass through an embedding table and hidden layers to predict the next token over a 30-word vocabulary.</figcaption>
+</figure>
 
 *For now, understanding the architecture of this model doesn't matter, this is just for understanding how we used embeddings! 30 is the vocab size. and we predicted next word after that 3 word sequence.*
 
@@ -81,8 +84,7 @@ The main steps can be named as:
 Next, I would be creating notes on Tokenization and Numericalization.
 
 
-### Sources
-
+## References
 [^1]: [Fastai blog post](https://www.fast.ai/posts/2020-01-13-self_supervised.html)
 [^2]: [Jurgen introduced it way before](https://people.idsia.ch/~juergen/FKI-126-90_(revised)bw_ocr.pdf)
 [^3]: [Fastbook course](https://github.com/fastai/fastbook/blob/master/10_nlp.ipynb)

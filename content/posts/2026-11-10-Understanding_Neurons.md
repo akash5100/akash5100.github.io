@@ -41,6 +41,6 @@ For your opening paragraph right under your intro line, start by stating the **c
 
 
 
-# References
+## References
 - [Cammarata, N., 2026. Neural Networks Are Already Clean. Goodfire](https://already-clean.goodfire.com/#prior-work) 
 - 

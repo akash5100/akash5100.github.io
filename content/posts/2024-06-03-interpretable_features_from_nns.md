@@ -54,7 +54,8 @@ UNet is an encoder decoder structure, the Encoder encodes the input image to fea
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Sparse_Autoencoders/unet.png" alt='u net' style="max-width: 100%; height: auto; align: center">
+  <img src="/assets/Sparse_Autoencoders/unet.png" alt="Undercomplete vs. overcomplete autoencoder bottleneck diagram" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Autoencoder bottleneck structure: compressing inputs into a lower-dimensional latent space before reconstruction.</figcaption>
 </figure>
 <hr>
  
@@ -106,15 +107,15 @@ KL divergence is a measure of how one distribution differs from a another distri
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Sparse_Autoencoders/acts.png" alt='acts' style="max-width: 100%; height: auto; align: center">
+  <img src="/assets/Sparse_Autoencoders/acts.png" alt="Equation for average hidden-layer activation rho_hat over a training set of size M" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> if a is the activations from a single forward pass, x is the weights of autoencoder hidden layer, we calculate the average activation over the training set. where M is the length of dataset. So p^ (rho_hat) is the average activation on the training set. <br><br> we want the constrain this "rho_hat" to something like 0.05. Sparse.<br><br></figcaption>
 </figure>
-<figcaption> if a is the activations from a single forward pass, x is the weights of autoencoder hidden layer, we calculate the average activation over the training set. where M is the length of dataset. So p^ (rho_hat) is the average activation on the training set. <br><br> we want the constrain this "rho_hat" to something like 0.05. Sparse.<br><br></figcaption>
 
 <figure style="text-align: center;">
-  <img src="/assets/Sparse_Autoencoders/kl.png" alt='kl' style="max-width: 100%; height: auto; align: center">
-</figure>
-<figcaption> we use KL divergence: <br> <br>
+  <img src="/assets/Sparse_Autoencoders/kl.png" alt="KL divergence sparsity penalty summed over s2 hidden neurons" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> we use KL divergence: <br> <br>
 s2 is the number of neuron in the hidden layer, p (rho) is the sparisity parameter (0.05 what we decided), in other words we would like the average activations of each hidden neurons to have to be close to p "sparsity parameter". This is the KL divergence, which tells us how distance is the distribution of activations (rho_hat) from what we want (rho).</figcaption>
+</figure>
 <hr>
 
 We can use KL divergence as our criterion (loss function), infact this is very close to cross-entropy loss.
@@ -146,9 +147,9 @@ loss = r_loss + sp
 Antropic team, grabbed a layer's activation of Claude 3 Sonnet from somewhere in "middle" [^1] and trained their sparse autoencoder in it. 
 
 <figure style="text-align: center;">
-  <img src="/assets/Sparse_Autoencoders/antropic_sae.png" alt='antropic_autoencoder' style="max-width: 100%; height: auto; align: center">
+  <img src="/assets/Sparse_Autoencoders/antropic_sae.png" alt="Anthropic sparse autoencoder decomposing middle-layer MLP activations of Claude 3 Sonnet into interpretable features" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Sparse autoencoder decomposing middle-layer activations into monosemantic features (source: <a href="https://transformer-circuits.pub/2023/monosemantic-features/index.html">Anthropic Transformer Circuits</a>).</figcaption>
 </figure>
-<figcaption>image source: https://transformer-circuits.pub/2023/monosemantic-features/index.html</figcaption>
 
 ```py
 # implementation
@@ -183,7 +184,7 @@ Notice this:
   - [listed here](https://akzsh.notion.site/1183d52721024e3e9a8f3cd4e84280a2)
 
 
-### References
+## References
 [^1]: [Mapping the Mind of a Large Language Model](https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html)
 
 - every other source is provided directly in the hyperlink.

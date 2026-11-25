@@ -19,10 +19,9 @@ Here is a visualization of vanilla training:
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output.gif" alt='vanilla training' style="max-width: 100%; height: auto; align: center">
-  <figcaption>top left is "input", and the bottom right most is the "loss". Upper layer is the forward pass i.e, attentions and lower layer is the backward pass, i.e, gradients  
-  The purple shaded circles indicate which of the nodes need to be held in memory at any given time.
-</figcaption>
+  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output.gif" alt="Standard backpropagation memory animation holding all forward-pass activations in memory" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> top left is "input", and the bottom right most is the "loss". Upper layer is the forward pass i.e, attentions and lower layer is the backward pass, i.e, gradients  
+  The purple shaded circles indicate which of the nodes need to be held in memory at any given time.</figcaption>
 </figure>
 <hr>
 
@@ -30,8 +29,8 @@ However, if the cost of computation < cost of memory, we have limited memory and
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output_poor.gif" alt='recompute forward pass for each backward pass' style="max-width: 100%; height: auto; align: center">
-  <figcaption>We recompute the activation when we need during the backward pass.</figcaption>
+  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output_poor.gif" alt="Memory-minimal training animation recomputing forward activations for every backward step" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> We recompute the activation when we need during the backward pass.</figcaption>
 </figure>
 <hr>
 
@@ -41,13 +40,13 @@ There are checkpoints nodes in the memory during the forward pass, while the rem
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output2.gif" alt='gradient checkpointing' style="max-width: 100%; height: auto; align: center">
-  <figcaption>In the first forward pass, we set checkpoints. In the backward pass we recalculate from the last checkpoint. This method trades off compute and memory </figcaption>
+  <img src="/assets/Deep_network_Training_Hack_Gradient_Checkpointing/output2.gif" alt="Gradient checkpointing animation storing periodic checkpoints and recomputing intermediate activations on demand" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> In the first forward pass, we set checkpoints. In the backward pass we recalculate from the last checkpoint. This method trades off compute and memory</figcaption>
 </figure>
 <hr>
 
 **Optimal checkpointing selection**  
 Marking every \\(\sqrt{n}\\) -th node as a checkpoint optimizes memory usage, scaling with the square root of the number of layers.
 
-### Sources
+## References
 [^1]: [Gradient Checkpointing](https://github.com/cybertronai/gradient-checkpointing)

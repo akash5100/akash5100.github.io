@@ -26,10 +26,8 @@ Consider a slope which is shallow horizontally and steep vertically. So with thi
 
 
 <figure style="text-align: center;">
-  <img src="/assets/Optimization_techniques/SGD.png" alt='SGD vertical spikes' style="max-width: 100%; height: auto;">
-  <figcaption>
-  parameter present in shallow horizontally and steep vertically, converging to minima using SGD. 
-  </figcaption>
+  <img src="/assets/Optimization_techniques/SGD.png" alt="SGD optimization path oscillating vertically along steep curvature while progressing slowly horizontally" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> parameter present in shallow horizontally and steep vertically, converging to minima using SGD.</figcaption>
 </figure>
 <hr style="margin-top: 20px; margin-bottom: 20px;">
 
@@ -46,13 +44,13 @@ Where `v` is the momentum that we build along the process of training and `mu` i
 
 This method overshoots but converges quickly compared to standard gradient descent.
 
-<figure style="text-align: center;" style="display: flex;">
-  <img src="/assets/Optimization_techniques/opt2.gif" alt='techniques' style="max-width: 50%; height: auto;">
-  <img src="/assets/Optimization_techniques/opt1.gif" alt='techniques' style="max-width: 50%; height: auto;">
+<figure style="text-align: center;">
+  <div style="display: flex; justify-content: center; gap: 8px;">
+    <img src="/assets/Optimization_techniques/opt2.gif" alt="2D contour comparison of optimization trajectories including SGD, Momentum, RMSProp, and Adam" style="max-width: 50%; height: auto;">
+    <img src="/assets/Optimization_techniques/opt1.gif" alt="3D saddle-point comparison of optimization trajectories escaping flat regions" style="max-width: 50%; height: auto;">
+  </div>
+  <figcaption><strong>Fig. 2.</strong> Animated comparison of optimization algorithms on a 2D contour surface (left) and a 3D saddle point (right) (source: <a href="https://twitter.com/alecrad">Alec Radford</a>).</figcaption>
 </figure>
-  <figcaption>
-  image credit: https://twitter.com/alecrad 
-  </figcaption>
 
 <br>
 Usually, the value of `mu` is set to `0.5` or `0.9`, but sometimes it is annealed over time from `0.5` to `0.9`.
@@ -69,10 +67,8 @@ Nesterov momentum is a slightly different version of momentum that has gained po
 The core idea behind Nesterov momentum is that when the current parameter vector is at some position `x`, then looking at the momentum update above, we know that the momentum term alone (i.e. ignoring the second term with the gradient) is about to nudge the parameter vector by `mu * v`. Therefore, if we are about to compute the gradient, we can treat the future approximate position `x + mu * v` as a "lookahead" -- this is a point in the vicinity of where we are soon going to end up. Hence, it makes sense to compute the gradient at `x + mu * v` instead of at the "old/stale" position `x`.
 <br>
 <figure style="text-align: center;">
-  <img src="/assets/Optimization_techniques/nesterov.png" alt='NAG' style="max-width: 100%; height: auto;">
-  <figcaption>
-  If we know the momentum of the parameter (calculated previously), we use that and calculate the gradients ahead in that position.
-  </figcaption>
+  <img src="/assets/Optimization_techniques/nesterov.png" alt="Nesterov accelerated gradient lookahead vector diagram" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> If we know the momentum of the parameter (calculated previously), we use that and calculate the gradients ahead in that position.</figcaption>
 </figure>
 <br>
 That is, in a slightly awkward notation, we would like to do the following:
@@ -117,10 +113,8 @@ TLDR;
 
 <br>
 <figure style="text-align: center;">
-  <img src="/assets/Optimization_techniques/adagrad.png" alt='adagrad' style="max-width: 100%; height: auto;">
-  <figcaption> link to the Adagrad paper: 
-  https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf
-  </figcaption>
+  <img src="/assets/Optimization_techniques/adagrad.png" alt="Adagrad per-parameter adaptive learning rate update equation" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Adagrad adaptive update rule (source: <a href="https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf">Duchi et al., 2011</a>).</figcaption>
 </figure>
 <br>
 
@@ -241,7 +235,6 @@ A second-order group of methods for optimization in deep learning is based on Ne
 
 In practice, it is currently not common to see Lbfgs or similar second order methods applied to large scale deep learning and convolutional neural networks instead sgd variants based on nested momentum are more standard Because they're simpler and scale more easily. 
 
-## Sources
-
+## References
 - Inspired from cs231n "Lecture 6: Neural Networks Part 3 / Intro to ConvNets".
 - [cs231n Notes](https://cs231n.github.io/neural-networks-3/)

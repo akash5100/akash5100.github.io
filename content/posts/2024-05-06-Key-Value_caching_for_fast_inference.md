@@ -32,15 +32,15 @@ If you see, we are again and again calculating the Key and Values for last `t-1`
 KV caching addresses this issue by storing the computed Key (K) and Value (V) matrices for each token generation step. This allows the model to reuse these cached matrices instead of recomputing them from scratch at each step, reducing the computational cost.
 
 <figure style="text-align: center;">
-  <img src="/assets/Key-Value_caching_for_fast_inference/1.gif" alt='KV-caching' style="max-width: 100%; height: auto;">
-  <figcaption>Source of the image at the end</figcaption>
+  <img src="/assets/Key-Value_caching_for_fast_inference/1.gif" alt="Autoregressive transformer decoding animation without KV caching recomputing past keys and values" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Autoregressive decoding without KV caching: past Key and Value projections are recomputed at every generation step.</figcaption>
 </figure>
 
 With KV caching, the sequence length still increases by 1 at each step, but the model can efficiently reuse previously computed K and V matrices, mitigating the quadratic increase in computation. This makes long-range generation more efficient and scalable.
 
 <figure style="text-align: center;">
-  <img src="/assets/Key-Value_caching_for_fast_inference/2.gif" alt='KV-caching' style="max-width: 100%; height: auto;">
-  <figcaption>Source of the image at the end</figcaption>
+  <img src="/assets/Key-Value_caching_for_fast_inference/2.gif" alt="Autoregressive transformer decoding animation with KV caching reusing past key and value matrices" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Autoregressive decoding with KV caching: previously computed Key and Value matrices are cached and reused, computing projections only for the new token.</figcaption>
 </figure>
 
 <hr>
@@ -61,6 +61,5 @@ By caching the Key (K) and Value (V) matrices for each token generation step, KV
 
 As the next generated token is used as `query` to the next prediction, we need to recompute this every time. We don't know the future prediction, [do we](https://arxiv.org/pdf/2404.19737)? :)   
 
-### Sources
-
+## References
 - As this blog is an personal notes, this medium blog is an awesome read: [kv-caching explained](https://medium.com/@joaolages/kv-caching-explained-276520203249)

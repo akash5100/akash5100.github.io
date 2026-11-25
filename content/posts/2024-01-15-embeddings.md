@@ -35,8 +35,10 @@ There is the *User* table[^2] and a Movie (*items*) table called movie.csv. Merg
 
 
 ```py
-rating = pd.read_csv(path/'rating.csv').drop(columns=['timestamp'])
-movie = pd.read_csv(path/'movie.csv', usecols=(0,1)) # for now using, movie id and title
+rating = pd.read_csv(path / "rating.csv").drop(columns=["timestamp"])
+movie = pd.read_csv(
+    path / "movie.csv", usecols=(0, 1)
+)  # for now using, movie id and title
 rating = rating.merge(movie)
 rating.head()
 ```
@@ -49,7 +51,10 @@ rating.head()
 | 244 | 51 | 2 |
 | 166 | 346 | 1 |
 
-![image](/assets/embeddings/d02f4206-296c-49c1-b1d1-1937d67b9f70.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/d02f4206-296c-49c1-b1d1-1937d67b9f70.png" alt="User-by-movie ratings crosstab matrix with missing cells" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> User-by-movie ratings crosstab matrix, where missing cells represent unseen or unrated movies to be predicted.</figcaption>
+</figure>
 
 This crosstab table shows *ratings* a user gave to a movie. We would like our model to learn to fill the missing ones. Those missing cells are the place where the user have not seen that movie or not reviewed it.
 
@@ -57,7 +62,10 @@ This crosstab table shows *ratings* a user gave to a movie. We would like our mo
 
 If we knew for each user to what degree they liked each category that a movie might fall into, such as genre, age, actors, etc then a simple way to fill these is multiplication of all of them and add them. For instance, lets assume these are ranging from -1 to +1, close to +1 means the user liked it, and vice versa.
 
-![image](/assets/embeddings/29cfeda6-cbf6-49f6-bf5f-2e690c385988.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/29cfeda6-cbf6-49f6-bf5f-2e690c385988.png" alt="Dot product of user preference vector and movie feature vector" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Computing a predicted rating score via the dot product of latent user preference and movie feature vectors.</figcaption>
+</figure>
 
 The result of the multiplication and addition is called *Score*. If we have these numbers for each users and items (movies) we can __dot product__ them and get the scores.
 
@@ -67,7 +75,10 @@ From where do we get these numbers for each user and item, the answer is we don'
 
 Here is how the overall image will look like:
 
-![image](/assets/embeddings/4da135a6-1d5d-4e96-a6cf-ddf4b82d122b.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/4da135a6-1d5d-4e96-a6cf-ddf4b82d122b.png" alt="Matrix factorization of user and movie embedding matrices" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Matrix factorization setup: multiplying the user embedding matrix (<code>n_users × 4</code>) by the movie embedding matrix (<code>4 × n_movies</code>).</figcaption>
+</figure>
 
 We created 2 matrix, depending on how many feature each user and movie will have (here 4, act, com, scifi, rom. So `n_user x 4` and `4 x n_movies`), initialized both with random number because we are going to learn it anyway using SGD.
 
@@ -80,9 +91,9 @@ We have 2 latent factor matrix, for user and item. To make predictin, we need to
 users = torch.tensor([[0.1, 0.2, 0.3],
                       [0.4, 0.5, 0.6],
                       [0.7, 0.8, 0.9]])
-#(3 users x 3 factors)
+# (3 users x 3 factors)
 
-# One-hot encoded vector for 2nd user 
+# One-hot encoded vector for 2nd user
 one_hot = torch.tensor([0, 1, 0])
 
 # Matrix Multiplication
@@ -100,7 +111,10 @@ But this is inefficient, we can think how big will be the one-hot encoded matric
 
 We have non-linearity in labels, our universal function approxiator (neural nets) want to learn that non-linearity, So, what we learn? weights and bias. If the weights are increased more and more over time, what will happen? 
 
-![image](/assets/embeddings/6702cbb2-bb7b-4096-b7f1-d321e0e6c721.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/6702cbb2-bb7b-4096-b7f1-d321e0e6c721.png" alt="Overfitted sharp function curve compared to a smooth fit" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Overfitting when weights grow too large, producing overly sharp curves instead of a smooth generalization.</figcaption>
+</figure>
 
 It will be more and more *sharp*, that's nothing but overfitting.
 
@@ -156,14 +170,14 @@ class DotProductModel(nn.Module):
         self.item_bias = create_embs([n_items])
         self.y_range = y_range
 
-    def forward(self, x): # assuming x is [userid, itemid]
+    def forward(self, x):  # assuming x is [userid, itemid]
         # we need dot product of user*item matrix
-        users = self.user_factors[:, 0] # every row's userid
-        items = self.item_factors[:, 1] # every row's itemid
-        res = (users*items).sum(dim=1) # keep the dim to 1
+        users = self.user_factors[:, 0]  # every row's userid
+        items = self.item_factors[:, 1]  # every row's itemid
+        res = (users * items).sum(dim=1)  # keep the dim to 1
         # add bias
-        res += self.user_bias[x[:,0]] + self.item_bias[x[:,1]]
-        return sigmoid_range(res, *self.y_range) # unpack y_range and pass
+        res += self.user_bias[x[:, 0]] + self.item_bias[x[:, 1]]
+        return sigmoid_range(res, *self.y_range)  # unpack y_range and pass
 ```
 
 
@@ -198,7 +212,10 @@ Yo, what we saw above is just a simple dot product, there are 2 ways that I lear
 Look below the image of Google play's rec sys.
 
 
-![image](/assets/embeddings/4ec0baa6-22f1-4fe8-87c7-9f08e4e65ec5.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/4ec0baa6-22f1-4fe8-87c7-9f08e4e65ec5.png" alt="Neural collaborative filtering diagram concatenating user and movie embeddings with entity embedding notes" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> Deep collaborative filtering and entity embedding diagram: concatenating user and movie embeddings before linear layers, or combining categorical embeddings with raw continuous inputs.</figcaption>
+</figure>
 
 
 **Entity Embedding Paper and Google Play's Recommendation system**
@@ -207,17 +224,21 @@ Google Play's recommendation system paper[^4]
 
 [^4]: [Wide and Deep Learning for Recommender System](https://arxiv.org/abs/1606.07792)
 
-![image](/assets/embeddings/eab05bc6-9895-46d5-9834-eadf53437db0.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/eab05bc6-9895-46d5-9834-eadf53437db0.png" alt="Wide and Deep Learning architecture concatenating categorical embeddings with raw features" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> Combining learned categorical entity embeddings with raw categorical data before feeding into a neural network (source: <a href="https://arxiv.org/abs/1606.07792">Wide &amp; Deep Learning</a>).</figcaption>
+</figure>
 
 This entity embedding specifically refers to the second part, when we have embeddings for categorical variables, we can concatenate them (the embedding) with RAW categorical data, (either one hot encoded or ordinal) and use that result to feed into Neural network.
 
 
 > this below is from 'Practical Deep Learning for Coders book' worth sharing
 
-![image](/assets/embeddings/e7bd8588-0954-4649-a7c6-fc6c004c2de6.png)
+<figure style="text-align: center;">
+  <img src="/assets/embeddings/e7bd8588-0954-4649-a7c6-fc6c004c2de6.png" alt="Excerpt from Practical Deep Learning for Coders on storing and reusing learned embeddings centrally" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> Excerpt from <em>Practical Deep Learning for Coders</em> noting that learned column embeddings can be stored centrally and reused across multiple models.</figcaption>
+</figure>
 
 **Other thing that I learned, that want to remember is (might be wrong on this)**
 
 Big orgs doesn't create better architectures (their researchers do), How the researchers do? on addition to working on researches, they stay up-to-date with research on that specific domain they are working, for example NLP, Computer Vision etc. When they like some new discoveries, they keep that. On top level, this could be more easily understood if you think of this example: there are startups like Figma which provides better features from the already available products like Adobe, and later Adobe buys it. The same thing happens with architectures - maybe they see a breakthrough research, if open source research, they test it and if they get success they spent their resources in that, who knows.
-
-**Sources**

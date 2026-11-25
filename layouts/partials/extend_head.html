@@ -2,8 +2,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+{{- end }}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        {{- if or .Params.math .Site.Params.math }}
         renderMathInElement(document.body, {
             delimiters: [
                 {left: '$$', right: '$$', display: true},
@@ -13,9 +15,16 @@
             ],
             throwOnError: false
         });
+        {{- end }}
+
+        document.querySelectorAll('a[href]').forEach((a) => {
+            if (a.hostname && a.hostname !== window.location.hostname) {
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            }
+        });
     });
 </script>
-{{- end }}
 
 <style>
 /* Code block horizontal scroll (no-wrap by default) */
@@ -51,4 +60,84 @@ pre.is-wrapped code {
 .wrap-code {
     right: 62px;
 }
+
+/* Typography */
+body,
+.post-content,
+.post-content p,
+.post-content li {
+    font-size: 16px !important;
+    line-height: 1.6;
+}
+.post-title {
+    font-size: 36px !important;
+}
+.post-content h1 {
+    font-size: 28px !important;
+}
+.post-content h2 {
+    font-size: 24px !important;
+}
+.post-content h3 {
+    font-size: 18px !important;
+}
+.post-content h4 {
+    font-size: 16px !important;
+}
+.toc {
+    font-size: 15px !important;
+}
+.post-content table th,
+.post-content table:not(.highlighttable, .highlight table, .gist .highlight) td {
+    min-width: 80px;
+    padding: 6px 4px;
+    line-height: 1.25;
+}
+.post-content table th {
+    font-size: 14px;
+}
+.post-content a {
+    transition: color 0.15s ease;
+}
+.post-content a:hover {
+    color: #aaa !important;
+}
+.post-content figure > figcaption {
+    font-weight: 400 !important;
+    font-size: 0.9em !important;
+    color: #888 !important;
+}
+.katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 19px;
+    height: 11px;
+}
+::-webkit-scrollbar-track {
+    background: 0 0;
+}
+.list:not(.dark)::-webkit-scrollbar-track {
+    background: var(--code-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--tertiary);
+    border: 5px solid var(--theme);
+    border-radius: var(--radius);
+}
+.list:not(.dark)::-webkit-scrollbar-thumb {
+    border: 5px solid var(--code-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+}
 </style>
+
+{{- if not hugo.IsServer }}
+<script data-goatcounter="https://akash5100.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+{{- end }}

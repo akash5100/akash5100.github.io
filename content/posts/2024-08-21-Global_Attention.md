@@ -100,6 +100,5 @@ $$
 Global attention captures the attention of tokens in sequence as well as the attention of blocks of tokens. this makes the learning better.
 
 
-### Source
-
+## References
 [LongT5 Paper](https://huggingface.co/papers/2112.07916)

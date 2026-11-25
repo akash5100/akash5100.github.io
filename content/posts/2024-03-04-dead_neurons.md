@@ -22,9 +22,10 @@ vocab_sz = len(chars) # it's 27
 
 Here is the architecture:
 
-![arch](/assets/deadneurons/arch.png)
-
-Source: <https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf>
+<figure style="text-align: center;">
+  <img src="/assets/deadneurons/arch.png" alt="Neural probabilistic language model architecture from Bengio et al. (2003)" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Neural probabilistic language model architecture (source: <a href="https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">Bengio et al., 2003</a>).</figcaption>
+</figure>
 
 ```py
 C  = torch.randn(vocab_sz, emb_sz)
@@ -86,8 +87,8 @@ epoch:      50/    200 | loss: 2.8150 | perplexity: 16.6932
 Firstly, I want to explain why we need to initialize the weights of our model with good values. As observed, the initial loss is very high, and then subsequent losses are very low. The weights we initialized are significantly incorrect, as some are very confidently wrong while others can be overly confident. This necessitates spending time and computational resources to correct them before starting unbiased learning. Thus, improving parameter initialization can help us skip this unnecessary step, which otherwise wastes energy and computation.
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/badinit.png" alt='Hockey stick loss which is due to bad initial weights initialization'>
-  <figcaption>Hockey stick loss which is due to bad initial weights initialization</figcaption>
+  <img src="/assets/deadneurons/badinit.png" alt="Hockey-stick training loss curve caused by poor initial weight scaling" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Hockey stick loss which is due to bad initial weights initialization</figcaption>
 </figure>
 
 Let's visualize the logits in a histogram:
@@ -96,8 +97,8 @@ Let's visualize the logits in a histogram:
 plt.hist(logits.tolist(), 50);
 ```
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/badlogits.png" alt='Logits values are too big to converge'>
-  <figcaption>Logits values are too big to converge</figcaption>
+  <img src="/assets/deadneurons/badlogits.png" alt="Histogram of initial logits showing overly wide values far from zero" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Logits values are too big to converge</figcaption>
 </figure>
 
 The mean is near 100 or so. We can achieve our objectives if the logits obtained in the final layer are low instead of very high. To accomplish this, we can initialize the bias of the final layer to zero, allowing the neural network to learn how to offset it by itself, and initialize the weights with small numbers.
@@ -115,15 +116,15 @@ plt.hist(logits[0].tolist(), 50);
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/goodlogits.png" alt='Logits values are near zero'>
-  <figcaption>Logits values are near zero</figcaption>
+  <img src="/assets/deadneurons/goodlogits.png" alt="Histogram of initial logits concentrated near zero after proper weight initialization" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Logits values are near zero</figcaption>
 </figure>
 
 We should not initialize weights with zero, just as the bias, because this would cause all neurons to update in the same way, resulting in symmetric and redundant weights throughout the training process.
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/goodloss.png" alt='better than a hockey stick loss'>
-  <figcaption>isn't this better than a hockey stick loss?</figcaption>
+  <img src="/assets/deadneurons/goodloss.png" alt="Smooth training loss curve without the initial hockey-stick drop" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> isn't this better than a hockey stick loss?</figcaption>
 </figure>
 
 ## Peeking inside a hidden layer
@@ -168,8 +169,8 @@ plt.hist(h.view(-1).tolist(), 50);
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/saturatedtanh.png" alt='Saturated Tanh'>
-  <figcaption>Saturated Tanh</figcaption>
+  <img src="/assets/deadneurons/saturatedtanh.png" alt="Histogram of saturated tanh activations clustered at -1 and +1" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> Saturated Tanh</figcaption>
 </figure>
 
 We can actually do the same small number multiplication to the W1 and B1 which gives us hidden state (h).
@@ -185,8 +186,8 @@ plt.hist(h.view(-1).tolist(), 50);
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/goodtanh.png" alt='better Tanh'>
-  <figcaption>better Tanh</figcaption>
+  <img src="/assets/deadneurons/goodtanh.png" alt="Histogram of well-behaved tanh activations spread across the active region" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> better Tanh</figcaption>
 </figure>
 
 This is because, as we can observe, the differentiation of tanh is as follows:
@@ -210,8 +211,8 @@ plt.imshow((h.abs()<0.99).tolist(), cmap='gray')
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/hplot.png" alt='Visualization of Hidden Layer Activations with Tanh Function'>
-  <figcaption>Visualization of Hidden Layer Activations with Tanh Function</figcaption>
+  <img src="/assets/deadneurons/hplot.png" alt="2D heatmap visualization of hidden layer tanh activations showing saturated neurons in white" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 8.</strong> Visualization of Hidden Layer Activations with Tanh Function</figcaption>
 </figure>
 
 In this plot, white cells indicate dead neurons. If a complete column is white, it will completely destroy any gradients flowing through it, and weights beyond that column will never learn because they will never receive gradients.
@@ -219,8 +220,8 @@ In this plot, white cells indicate dead neurons. If a complete column is white, 
 Similar issues occur with other activation functions, such as Sigmoid, Relu, and ELU, because they also have a squashing plane. A research paper (<https://arxiv.org/pdf/1502.01852.pdf>) extensively studied this phenomenon, particularly in the context of Relu and PRelu in convolutional neural nets. They found that if a Relu neuron never activates for any input *in the dataset*, its weights and biases will never receive gradients, rendering it ineffective. Conversely, if it receives excessively large gradients (possible with high learning rates), it will be knocked out of the data manifold, preventing it from learning from the rest of the training data.
 
 <figure style="text-align: center;">
-  <img src="/assets/deadneurons/acts.png" alt='Activations'>
-  <figcaption>Activations</figcaption>
+  <img src="/assets/deadneurons/acts.png" alt="Comparison of activation functions including Sigmoid, Tanh, ReLU, and ELU" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 9.</strong> Activations</figcaption>
 </figure>
 
 They also proposed a solution to this problem: when initializing weights and biases in a Gaussian distribution, if the resulting standard deviation shifts too much, we need to retain the original standard deviation. We can achieve this by multiplying the weight matrix by a small number during initialization. Surprisingly, the number we multiply is the new standard deviation for that matrix.
@@ -270,3 +271,9 @@ A gain might be necessary because activation functions like Relu and Tanh squash
 
 ## Summary
 The activation function squashes the weights, so we should be concerned about how we initialize them. For example, in the tanh function, we don't want them to saturate to one or negative one. To maintain good performance, we normalize them with a gain, which can typically be found as the square root of the fan-in. There are additional mathematical principles to consider, such as the Kaiming initialization, which also utilizes a gain multiplied by a constant for different activations like Sigmoid, Linear, and ReLU.
+
+
+## References
+1. Bengio, Y., Ducharme, R., Vincent, P., & Jauvin, C. (2003). [A Neural Probabilistic Language Model](https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf). *JMLR*.
+2. He, K., Zhang, X., Ren, S., & Sun, J. (2015). [Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification](https://arxiv.org/pdf/1502.01852.pdf).
+3. [PyTorch `torch.nn.init` documentation (`kaiming_normal_`, `calculate_gain`)](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.kaiming_normal_)

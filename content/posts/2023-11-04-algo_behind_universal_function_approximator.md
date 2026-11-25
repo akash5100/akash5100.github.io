@@ -57,23 +57,38 @@ The time I wrote this blog, I was coding a neural net(from scratch) to train [MN
 
 To train images, let's say 3x3 pixel image (just an example)
 
-![image](/assets/algo_behind_universal_function_approximator/0501fc39-a9c7-4394-ae32-8dbd82963d6c.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/0501fc39-a9c7-4394-ae32-8dbd82963d6c.png" alt="3x3 pixel image represented as a 2D matrix" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Example 3x3 pixel image represented as a 2D matrix.</figcaption>
+</figure>
 
 We [flatten](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html) the matrix (image represented on 2D array)
 
-![image](/assets/algo_behind_universal_function_approximator/7ba14fba-1370-446f-b893-4df9fc902864.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/7ba14fba-1370-446f-b893-4df9fc902864.png" alt="Flattened 1D array of the 3x3 pixel image" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Flattening the 2D image matrix into a 1D input vector.</figcaption>
+</figure>
 
 and the same thing, let's represent the pixels with 0-9.
 
-![image](/assets/algo_behind_universal_function_approximator/fba41914-233b-4dbf-9202-026bf25347b8.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/fba41914-233b-4dbf-9202-026bf25347b8.png" alt="Flattened pixel values represented as digits 0 through 9" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Representing the flattened pixel inputs numerically (0 to 9).</figcaption>
+</figure>
 
 This is the dot product of Input array and weights with a bias.
 
 To take the dot product multiply each input by each weight and then add them all up.
 
-![image](/assets/algo_behind_universal_function_approximator/dcd744b4-c278-44fb-af72-1009707d6f9b.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/dcd744b4-c278-44fb-af72-1009707d6f9b.png" alt="Dot product calculation multiplying inputs by weights and adding bias" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Computing the weighted sum (dot product) of inputs and weights plus a bias term.</figcaption>
+</figure>
 
-![image](/assets/algo_behind_universal_function_approximator/38830160-b362-41ad-a3d0-327bcd8e69c7.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/38830160-b362-41ad-a3d0-327bcd8e69c7.png" alt="ReLU activation applied to the neuron dot product output" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 5.</strong> Passing the weighted sum through a ReLU activation function.</figcaption>
+</figure>
 
 This dot product is passed into an activation function, in this case a ReLU.
 
@@ -84,7 +99,10 @@ max(-0.26, 0) = 0
 
 We feed the original inputs to a layer of neurons, each with their own weight and with their own learned value. The values of the weights and biases are calculated through the training process. We give the network input, and it produces an output. We compare the output with the actual output. This comparison is called the loss, which quantifies the difference between our prediction and the actual value.
 
-![image](/assets/algo_behind_universal_function_approximator/71d57e06-ba9f-4813-ba2f-948387d097a6.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/71d57e06-ba9f-4813-ba2f-948387d097a6.png" alt="Neural network forward pass producing an output compared against the target to compute loss" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 6.</strong> Forward pass from inputs through weighted neuron layers to an output prediction, compared with the target value to compute the loss.</figcaption>
+</figure>
 
 We now have to find out, what changes we can make to weights and biases of these neural net to reduce the loss. As we dont know what the function is in the neuron, we need to make changes to weights to see that if that change makes the loss go up or down. (Bruh! millions of neuron and for each neuron how many calculations???)
 
@@ -102,8 +120,17 @@ Now that we know what changes to make to weights, we do that and repeat the step
 
 Here are the steps:
 
-![image](/assets/algo_behind_universal_function_approximator/587b4f48-b318-4e43-bff1-e96f028d0f61.png)
+<figure style="text-align: center;">
+  <img src="/assets/algo_behind_universal_function_approximator/587b4f48-b318-4e43-bff1-e96f028d0f61.png" alt="Diagram of the gradient descent training loop steps" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 7.</strong> Iterative steps of the gradient descent optimization loop.</figcaption>
+</figure>
 
 adding some flavor to Gradient Decent makes it Stochastic gradient descent (SGD).
 
 ChatGPT: Stochastic Gradient Descent (SGD) is like spice in the recipe of Gradient Descent. In standard Gradient Descent, you calculate the average gradient using the entire dataset, which can be computationally expensive. In SGD, you spice things up by randomly selecting a single data point or a small batch of data points for each iteration. This randomness introduces noise, but it speeds up the process, making it more like a spicy, fast-paced version of Gradient Descent.
+
+
+## References
+1. [MNIST database — Wikipedia](https://en.wikipedia.org/wiki/MNIST_database)
+2. [NumPy `ndarray.flatten` documentation](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html)
+3. [Backpropagation — Wikipedia](https://en.wikipedia.org/wiki/Backpropagation)

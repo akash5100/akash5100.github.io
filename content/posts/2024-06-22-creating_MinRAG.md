@@ -140,3 +140,10 @@ From what I understand, I need a document, query encoder and a generator
   - encode query
   - use MCSS and get top-k vectors
 - concat and generate
+
+
+## References
+1. Lewis, P., et al. (2020). [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401).
+2. Reimers, N., & Gurevych, I. (2019). [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/pdf/1908.10084).
+3. [arXiv:2310.03214](https://arxiv.org/pdf/2310.03214)
+4. [Plane](https://plane.so)

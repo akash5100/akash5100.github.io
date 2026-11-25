@@ -63,13 +63,13 @@ H9 -> mean: -0.0001, std:  0.0000
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/Batch_Normalization/squashing_activations.png" alt='Visualization showing hidden activations being squashed, a phenomenon known as neuron saturation' style="max-width: 100%; height: auto;">
-  <figcaption>Visualization showing hidden activations being squashed, a phenomenon known as neuron saturation</figcaption>
+  <img src="/assets/Batch_Normalization/squashing_activations.png" alt="Visualization of hidden-layer activations squashed into saturation" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Visualization showing hidden activations being squashed, a phenomenon known as neuron saturation</figcaption>
 </figure>
 
 <figure style="text-align: center;">
-  <img src="/assets/Batch_Normalization/viz_bad_acts.png" alt='Activations collasping to 0 (if initialized small) and it will saturate at ends if initialized bigger'>
-  <figcaption>Activations collasping to 0 (if initialized small) and it will saturate at ends if initialized bigger</figcaption>
+  <img src="/assets/Batch_Normalization/viz_bad_acts.png" alt="Distribution of activations collapsing toward zero when weights are too small or saturating when weights are too large" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Activations collasping to 0 (if initialized small) and it will saturate at ends if initialized bigger</figcaption>
 </figure>
 
 
@@ -78,8 +78,8 @@ The Batch Normalization paper marked a significant milestone in deep learning. I
 As shown above in a tanh activation: if the weights are too large, activations saturate at 1 and -1, and if they're too close to zero, they saturate in the middle. Neither scenario is ideal.
 
 <figure style="text-align: center;">
-  <img src="/assets/Batch_Normalization/bn_paper.png" alt='Image from the original BatchNorm paper' style="max-width: 100%; height: auto;">
-  <figcaption>Image from the original BatchNorm paper</figcaption>
+  <img src="/assets/Batch_Normalization/bn_paper.png" alt="Batch Normalization algorithm box from Ioffe and Szegedy (2015)" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 3.</strong> Image from the original BatchNorm paper</figcaption>
 </figure>
 
 Batch Normalization paper is the first normalization layer technique that is used in deep learning. It addressed the problem of activations saturation in the weights that we initialize. We want the weights to be roughly Gaussian. The basic idea of this paper was *"if we want the activation of the hidden state to be Gaussian, then why don't we take that activation and normalize them to be Gaussian"*. Sounds funny but it actually works, we take the mean and standard deviation of the hidden state activations and we subtract the mean from each data point and divide them with standard deviation normalizes them to be roughly Gaussian.
@@ -108,8 +108,8 @@ gamma * h_normalized + beta # similar to XW + B :)
 ```
 
 <figure style="text-align: center;">
-  <img src="/assets/Batch_Normalization/viz_good_acts.png" alt='3 linear layer with 3 batchnorm layer, slightly better acts?'>
-  <figcaption>3 linear layer with 3 batchnorm layer, slightly better acts?</figcaption>
+  <img src="/assets/Batch_Normalization/viz_good_acts.png" alt="Activation distributions across 3 linear layers with Batch Normalization" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> 3 linear layer with 3 batchnorm layer, slightly better acts?</figcaption>
 </figure>
 
 The problem of activation for large neural net will become very quickly intractable to keep activation of hidden Layer roughly Gaussian as to keep them unsaturated. But sprinkling multiple batch mobilization layer is easy and effective but the comes with a terrible cost.
@@ -259,7 +259,6 @@ epoch    1900/20000   |   loss: 2.5848   |   perx: 13.2610
 epoch    2000/20000   |   loss: 2.1021   |   perx: 8.1833
 ```
 
-## Source
-
+## References
 - Inspired from this [lecture](https://www.youtube.com/watch?v=P6sfmUTpUmc&list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ&index=4&t=5213s).
 - Complete implementation: [github link](https://github.com/akash5100/ai-notebooks/blob/main/bigram/part3_batchnorm.ipynb)

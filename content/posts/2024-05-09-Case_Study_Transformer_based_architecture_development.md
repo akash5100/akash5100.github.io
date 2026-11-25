@@ -72,8 +72,8 @@ In the vanilla Transformer, attention doesn't flow between context windows. Cons
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-vanilla.png" alt='xl-vanilla' style="max-width: 100%; height: auto; align: center">
-  <figcaption>Illustration of the vanilla transformer with a segment length 4 ~from the Transformer-XL paper</figcaption>
+  <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-vanilla.png" alt="Vanilla Transformer processing fixed-length segments of 4 tokens independently without recurrence" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 1.</strong> Illustration of the vanilla transformer with a segment length 4 ~from the Transformer-XL paper</figcaption>
 </figure>
 <hr>
 
@@ -85,8 +85,8 @@ TransformerXL used caching of Key and Value attention computation to speed up in
 
 <hr>
 <figure style="text-align: center;">
-  <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-model.png" alt='xl-model' style="max-width: 100%; height: auto;">
-  <figcaption>Illustration of the Transformer-XL with a segment length 4 ~from the Transformer-XL paper</figcaption>
+  <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-model.png" alt="Transformer-XL segment-level recurrence reusing cached hidden states from the previous segment" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 2.</strong> Illustration of the Transformer-XL with a segment length 4 ~from the Transformer-XL paper</figcaption>
 </figure>
 <hr>
 
@@ -118,8 +118,8 @@ TransformerXL used caching of Key and Value attention computation to speed up in
   With the above achievement (reusing the previous context attention) we just created another problem. Notice, the positional encoding of current segment's first token is equal to the previous segment's first token.  
     <hr>
     <figure style="text-align: center;">
-      <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-incoherence.png" alt='xl-incoherence' style="max-width: 100%; height: auto;">
-      <figcaption>makes model confuse? ~from https://vimeo.com/384795188</figcaption>
+      <img src="/assets/Case_Study_Transformer_based_architecture_development/xl-incoherence.png" alt="Positional encoding collision when reusing absolute positions across Transformer-XL segments" style="max-width: 100%; height: auto;">
+      <figcaption><strong>Fig. 3.</strong> Absolute positional encoding collision across reused segments, motivating relative positional encodings (source: <a href="https://vimeo.com/384795188">Vimeo lecture</a>).</figcaption>
     </figure>
     <hr>
   To fix this the authors introduced the concept of "relative positional encoding" to capture the relative position information between the element in the input sequence. This is different from The absolute positional encoding used in the original transformer model, which represents the absolute position of each element in the sequence.  
@@ -170,8 +170,8 @@ The Transformer architecture, introduced in the paper "Attention is All You Need
     
   <hr>
   <figure style="text-align: center;">
-    <img src="/assets/Case_Study_Transformer_based_architecture_development/ST1.png" alt='xl-vanilla' style="max-width: 100%; height: auto; align: center">
-    <figcaption>Learned attention patterns from a 128-layer network</figcaption>
+    <img src="/assets/Case_Study_Transformer_based_architecture_development/ST1.png" alt="Learned sparse attention patterns across layers in a 128-layer Sparse Transformer" style="max-width: 100%; height: auto;">
+    <figcaption><strong>Fig. 4.</strong> Learned attention patterns from a 128-layer network</figcaption>
   </figure>
   <hr>
 
@@ -191,8 +191,8 @@ The paper introduced three key techniques to solve the quadratic complexity issu
     - **Scaling to 100 of layers:** Used pre-activation residual block.
     <hr>
     <figure style="text-align: center;">
-      <img src="/assets/Case_Study_Transformer_based_architecture_development/ST2.png" alt='xl-vanilla' style="max-width: 100%; height: auto; align: center">
-      <figcaption>from the Sparse Transformer paper</figcaption>
+      <img src="/assets/Case_Study_Transformer_based_architecture_development/ST2.png" alt="Pre-activation residual block diagram from the Sparse Transformer paper" style="max-width: 100%; height: auto;">
+      <figcaption><strong>Fig. 5.</strong> from the Sparse Transformer paper</figcaption>
     </figure>
     <hr>
 2. **Reuse attention matrices (saving memory)**  
@@ -228,3 +228,12 @@ The paper introduced three key techniques to solve the quadratic complexity issu
 
 ### Vision Transformer & Image transformer (Niki paramr)
 -->
+
+
+## References
+1. Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805).
+2. Dai, Z., Yang, Z., Yang, Y., Carbonell, J., Le, Q. V., & Salakhutdinov, R. (2019). [Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context](https://arxiv.org/abs/1901.02860).
+3. Child, R., Gray, S., Radford, A., & Sutskever, I. (2019). [Generating Long Sequences with Sparse Transformers](https://arxiv.org/abs/1904.10509).
+4. Radford, A., et al. (2019). [Better Language Models and Their Implications (GPT-2)](https://openai.com/index/language-unsupervised/).
+5. [Transformer-XL lecture (Vimeo)](https://vimeo.com/384795188) and [PyTorch `GradScaler` documentation](https://pytorch.org/docs/stable/amp.html#torch.cuda.amp.GradScaler).
+6. [CS231n Convolutional Neural Networks Case Studies](https://cs231n.github.io/convolutional-networks/#case-studies).

@@ -23,7 +23,7 @@ outputs:
     - JSON
 
 pagination:
-  pagerSize: 15
+  pagerSize: 1000
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -64,7 +64,7 @@ params:
   env: production
   title: "akash5100"
   description: "Documenting my deep learning journey"
-  author: "akash5100"
+  author: "Akash Verma"
   
   # PaperMod features
   mainSections:
@@ -73,7 +73,7 @@ params:
   ShowReadingTime: true
   ShowShareButtons: false
   ShowPostNavLinks: true
-  ShowBreadCrumbs: true
+  ShowBreadCrumbs: false
   ShowCodeCopyButtons: true
   ShowWordCount: false
   ShowRssButtonInSectionTermList: true
