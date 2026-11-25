@@ -1,7 +1,6 @@
 ---
 title: Why T > 1 Breaks Sigmoid Distillation
 date: 2026-11-25
-draft: true
 tags:
   - deeplearning
   - distillation
