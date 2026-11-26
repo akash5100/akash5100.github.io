@@ -87,6 +87,11 @@ Softmax and Sigmoid are not loss functions; they are just activation layers that
 - When the model is confident on the true label ($p = 0.99$), $-\log(0.99) \approx 0.01$ (almost zero penalty).
 - When the model puts tiny probability on the truth ($p = 0.0001$), $-\log(0.0001) \approx 9.21$ (a steep cliff of punishment).
 
+<figure style="text-align: center;">
+  <img src="/assets/2026-11-20-Why_T_Greater_than_1_Breaks_Sigmoid_Distillation/log_loss_curves.png" alt="Standard Natural Logarithm and Negative Log Loss Curves" style="max-width: 100%; height: auto;">
+  <figcaption><strong>Fig. 4.</strong> Standard natural logarithm $\ln(p)$ (left) flipped into Negative Log Loss $-\ln(p)$ (right): confident predictions near $p = 1.0$ incur near-zero loss, while confident mistakes near $p \to 0$ hit a steep penalty cliff.</figcaption>
+</figure>
+
 **Cross-Entropy, BCE, and NLL in plain English:**
 - **Cross-Entropy** ($-\sum_i y_i \log p_i$) is the general parent: a weighted sum of $-\log(p)$ across all $K$ classes (which is a weighted average whenever the target probabilities sum to 1).
 - **Negative Log-Likelihood (NLL)** is the hard-label special case where one-hot 0s switch off every non-target class, leaving only $-\log(p_{\text{true}})$. Because Softmax is a competition, pushing up the true class automatically pushes down the other classes in the denominator.
@@ -119,7 +124,7 @@ $$
 
 where $t$ and $s$ are the teacher and student logits, and $y \in \{0, 1\}^{80}$ are the ground-truth labels.
 
-I started with a controlled $\alpha \times T$ grid, sweeping $\alpha \in \{0.0, 0.5, 0.9, 1.0\}$ against $T = 1.0$ vs. $T = 4.0$. At every teacher weight, changing **only** $T$ from 1.0 to 4.0 dropped validation Macro-F1 by ~1.1% to 1.2% (**Table 1**, **Fig. 4**). Setting $\alpha = 1.0$ (100% teacher, 0% ground truth) removes the ground-truth term completely so we can see how the student learns from pure soft Sigmoid targets. Note also that scaling $\mathcal{L}_{\text{KD}}$ by $T$ instead of Hinton's $T^2$ does not change the $\alpha = 1.0$ results: with no ground-truth term to balance against, any constant multiplier cancels out inside both AdamW's normalized updates and the $y = 0$ vs. $y = 1$ gradient-share ratio.
+I started with a controlled $\alpha \times T$ grid, sweeping $\alpha \in \{0.0, 0.5, 0.9, 1.0\}$ against $T = 1.0$ vs. $T = 4.0$. At every teacher weight, changing **only** $T$ from 1.0 to 4.0 dropped validation Macro-F1 by ~1.1% to 1.2% (**Table 1**, **Fig. 5**). Setting $\alpha = 1.0$ (100% teacher, 0% ground truth) removes the ground-truth term completely so we can see how the student learns from pure soft Sigmoid targets. Note also that scaling $\mathcal{L}_{\text{KD}}$ by $T$ instead of Hinton's $T^2$ does not change the $\alpha = 1.0$ results: with no ground-truth term to balance against, any constant multiplier cancels out inside both AdamW's normalized updates and the $y = 0$ vs. $y = 1$ gradient-share ratio.
 
 **Table 1.** Validation Macro-F1 on MS-COCO 2017 across the $\alpha \times T$ grid. Changing only $T$ from 1.0 to 4.0 hurts Macro-F1 by 1.09% to 1.20% at every teacher weight.
 
@@ -141,25 +146,25 @@ $$
 
 <figure style="text-align: center;">
   <img src="/assets/2026-11-20-Why_T_Greater_than_1_Breaks_Sigmoid_Distillation/wandb_alpha_t_macro_f1.png" alt="MS-COCO Validation Macro-F1 Across alpha x T" style="max-width: 100%; height: auto;">
-  <figcaption><strong>Fig. 4.</strong> Validation Macro-F1 across the $\alpha \times T$ grid on MS-COCO 2017 (against the pure GT baseline at 78.84% and the SO400M teacher ceiling at 81.72%). At every teacher weight ($\alpha = 0.5, 0.9, 1.0$), $T = 4.0$ trails $T = 1.0$ by ~1.1%.</figcaption>
+  <figcaption><strong>Fig. 5.</strong> Validation Macro-F1 across the $\alpha \times T$ grid on MS-COCO 2017 (against the pure GT baseline at 78.84% and the SO400M teacher ceiling at 81.72%). At every teacher weight ($\alpha = 0.5, 0.9, 1.0$), $T = 4.0$ trails $T = 1.0$ by ~1.1%.</figcaption>
 </figure>
 
 ## Falsifying My First Explanation (7-Temperature Sweep)
 
-Looking at **Table 1** and **Fig. 4**, my first explanation (**Hypothesis A**) felt obvious: because raising $T$ flattens Sigmoid and pushes ~77 absent classes up toward 0.5, the student must be learning inflated absent-class probabilities and spraying **false positives**. If Hypothesis A were true, two things had to show up in validation: **Precision** had to crash, and the average predicted probability on absent classes, $E[p \mid y = 0]$, had to rise.
+Looking at **Table 1** and **Fig. 5**, my first explanation (**Hypothesis A**) felt obvious: because raising $T$ flattens Sigmoid and pushes ~77 absent classes up toward 0.5, the student must be learning inflated absent-class probabilities and spraying **false positives**. If Hypothesis A were true, two things had to show up in validation: **Precision** had to crash, and the average predicted probability on absent classes, $E[p \mid y = 0]$, had to rise.
 
-Macro-F1 merges Precision and Recall into one number, so it cannot tell you whether a drop came from false alarms or missed objects. To test Hypothesis A directly, I split Macro-F1 into Validation Macro-Precision and Macro-Recall at $\alpha = 1.0$ (**Fig. 5**).
+Macro-F1 merges Precision and Recall into one number, so it cannot tell you whether a drop came from false alarms or missed objects. To test Hypothesis A directly, I split Macro-F1 into Validation Macro-Precision and Macro-Recall at $\alpha = 1.0$ (**Fig. 6**).
 
 <figure style="text-align: center;">
   <img src="/assets/2026-11-20-Why_T_Greater_than_1_Breaks_Sigmoid_Distillation/wandb_precision_vs_recall.png" alt="Validation Macro-Precision vs. Macro-Recall Across Epochs 1-10" style="max-width: 100%; height: auto;">
-  <figcaption><strong>Fig. 5.</strong> Validation Macro-Precision and Macro-Recall across Epochs 1–10 at $\alpha = 1.0$ ($T = 1.0$ vs. $T = 4.0$ and $T = 6.0$). Precision stays flat alongside $T = 1.0$ (~88%), falsifying the false-positive hypothesis, while Recall splits below $T = 1.0$ (-1.74 pts at $T = 4.0$ and -2.29 pts at $T = 6.0$; the SO400M teacher sits at 76.90% Macro-R, off-scale above).</figcaption>
+  <figcaption><strong>Fig. 6.</strong> Validation Macro-Precision and Macro-Recall across Epochs 1–10 at $\alpha = 1.0$ ($T = 1.0$ vs. $T = 4.0$ and $T = 6.0$). Precision stays flat alongside $T = 1.0$ (~88%), falsifying the false-positive hypothesis, while Recall splits below $T = 1.0$ (-1.74 pts at $T = 4.0$ and -2.29 pts at $T = 6.0$; the SO400M teacher sits at 76.90% Macro-R, off-scale above).</figcaption>
 </figure>
 
 The data did the exact opposite of what Hypothesis A predicted. Precision stayed flat around ~88% across $T = 1.0$ to $6.0$ (and $E[p \mid y = 0]$ actually *fell* from 0.93% at $T = 1.0$ down to 0.69% at $T = 4.0$ and 0.67% at $T = 6.0$). Instead, **Macro-Recall** dropped cleanly (72.28% down to 70.54% at $T = 4.0$ and 69.99% at $T = 6.0$), alongside $E[p \mid y = 1]$ (73.57% down to 72.15%). The student was not crying wolf; it was missing real objects that were actually in the image.
 
 To see why the model stopped detecting present classes, I logged the share of training gradients coming from absent classes ($y = 0$) versus present classes ($y = 1$). That showed the real mechanism (**Hypothesis B: Negative-Tail Gradient Hijacking**): in BCE, each class's gradient scales with $(p - q)$, so pushing ~77 absent targets up toward 0.27–0.34 gives every absent class a much larger gradient pull. At $T = 4.0$, absent classes hijack **90.30%** of the gradient budget (and **92.54%** at $T = 6.0$), starving the ~3 present classes down to just 9.70% (7.46% at $T = 6.0$). Because the optimizer spends over 90% of its updates fitting absent-class logits, present-class logits are under-trained and Recall drops.
 
-Since two temperatures ($T = 1.0$ vs. $4.0$) cannot show a real trend or find where the sweet spot sits, I ran a full 7-temperature sweep from $T = 0.5$ to $6.0$ at $\alpha = 1.0$ (**Table 2**, **Fig. 6**). The sweep shows two opposite failure modes around $T = 1.0$:
+Since two temperatures ($T = 1.0$ vs. $4.0$) cannot show a real trend or find where the sweet spot sits, I ran a full 7-temperature sweep from $T = 0.5$ to $6.0$ at $\alpha = 1.0$ (**Table 2**, **Fig. 7**). The sweep shows two opposite failure modes around $T = 1.0$:
 - **Too cold ($T = 0.5$):** Teacher targets sharpen too hard toward 0 and 1, causing absent-class probability leakage $E[p \mid y = 0]$ to double (0.93% to 1.77%) and Val BCE to jump from 0.0376 to 0.0411.
 - **Sweet spot ($T = 1.0$):** Sits right at the minimum Val BCE (0.0376) and highest $E[p \mid y = 1]$ (73.57%), keeping present classes at 30.33% of the gradient budget with clean calibration (0.93% absent probability).
 - **Too hot ($T = 1.5$ to $6.0$):** Absent-class gradient share climbs steadily from 74.93% to 92.54%, starving present classes (25.07% down to 7.46%) and dragging down Val BCE (0.0384 to 0.0414), Macro-Recall (71.69% to 69.99%), and Macro-F1 (78.16% to 76.99%).
@@ -187,7 +192,7 @@ $$
 
 <figure style="text-align: center;">
   <img src="/assets/2026-11-20-Why_T_Greater_than_1_Breaks_Sigmoid_Distillation/wandb_temp_sweep_two_regimes.png" alt="7-Temperature Sweep: Gradient Share and Failure Regimes" style="max-width: 100%; height: auto;">
-  <figcaption><strong>Fig. 6.</strong> 7-temperature sweep ($T = 0.5$ to $6.0$ at $\alpha = 1.0$). Left: absent-class gradient share climbs steadily from 65.5% to 92.5%, starving present classes (34.5% down to 7.5%). Right: $T = 1.0$ sits at the minimum Val BCE (0.0376) between too-cold probability leakage ($T = 0.5$) and too-hot Recall loss ($T > 1$).</figcaption>
+  <figcaption><strong>Fig. 7.</strong> 7-temperature sweep ($T = 0.5$ to $6.0$ at $\alpha = 1.0$). Left: absent-class gradient share climbs steadily from 65.5% to 92.5%, starving present classes (34.5% down to 7.5%). Right: $T = 1.0$ sits at the minimum Val BCE (0.0376) between too-cold probability leakage ($T = 0.5$) and too-hot Recall loss ($T > 1$).</figcaption>
 </figure>
 
 ## Practical Takeaways & Related Work
