@@ -201,16 +201,6 @@ $$
 - **Why the student stays ~2.5–3% below the teacher.** Even at the $T = 1.0$ sweet spot, the frozen `SigLIP2-Base-256` student trails `SigLIP2-SO400M-384` (78.70%–79.22% vs. 81.72% Macro-F1). That gap comes from a smaller backbone running at lower input resolution (256px vs. 384px, where small objects lose detail). Keeping both backbones frozen was intentional so we could isolate the distillation loss and temperature behavior without mixing in backbone fine-tuning.
 - **Scope limits and related work.** These runs cover one sparse multi-label vision benchmark (MS-COCO 2017, ~96.4% negative sparsity) with frozen backbones. On much denser multi-label tasks (or cross-modal audio settings like AudioSet, where [CMKD (2022)](https://arxiv.org/html/2203.06760v1) reported gains from $T > 1$), the positive-to-negative gradient balance will look different, whereas on datasets with even more classes (hundreds or thousands) negative-tail gradient hijacking should hit even harder. Earlier papers like [Multi-Label Knowledge Distillation (Yang et al., ICCV 2023)](https://openaccess.thecvf.com/content/ICCV2023/papers/Yang_Multi-Label_Knowledge_Distillation_ICCV_2023_paper.pdf), [Multi-label Self Knowledge Distillation (Wang & Wang, AAAI)](https://ojs.aaai.org/index.php/AAAI/article/view/35433/37588), and [Dual-Head Knowledge Distillation (2024)](https://arxiv.org/html/2411.08937v1) also ran into the same issue with standard Softmax KD on multi-label Sigmoid outputs and propose decoupled or binary-KL fixes.
 
-## Appendix
-
-<details>
-<summary>Wandb logs</summary>
-<iframe
-  src="https://forge.coreweave.com/wandb/akash5100-trainbench/siglip2-distill-coco/reports/Why-T-1-Breaks-Sigmoid-Distillation--VmlldzoxODM2MjUyOA?accessToken=s5ab1vpq61ov4buzfkzkqu5s46dvi7pzqj76wun868zwg8ul0ffpwfh18kbs9wm0"
-  style="border:none;height:600px;width:100%">
-</iframe>
-</details>
-
 ## Citation
 
 Please cite this work as:
@@ -227,6 +217,16 @@ Please cite this work as:
   url     = {https://akash5100.github.io/posts/2026-11-20-why_t_greater_than_1_breaks_sigmoid_distillation/}
 }
 ```
+
+## Appendix
+
+<details>
+<summary>Wandb logs</summary>
+<iframe
+  src="https://forge.coreweave.com/wandb/akash5100-trainbench/siglip2-distill-coco/reports/Why-T-1-Breaks-Sigmoid-Distillation--VmlldzoxODM2MjUyOA?accessToken=s5ab1vpq61ov4buzfkzkqu5s46dvi7pzqj76wun868zwg8ul0ffpwfh18kbs9wm0"
+  style="border:none;height:600px;width:100%">
+</iframe>
+</details>
 
 ## References
 
